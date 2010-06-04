@@ -1,0 +1,271 @@
+<p>
+  <b>Slug:</b>
+  <%=h @directory.slug %>
+</p>
+<p>
+  <b>Path:</b>
+  <%=h @directory.path %>
+</p>
+	<script type="text/javascript">
+	var playlist_id = "1";
+	var actions=[
+	'playlist_info',
+	'playlist_oldest',
+	'playlist_previous',
+	'playlist_next',
+	'playlist_newest',
+	'row_load',
+	'row_reload',
+	'row_play',
+	'row_play_looped',
+	'row_pause',
+	'row_stop',
+	'cell_toggle_mute'
+	];
+	//   'row_edit',
+	//   'row_toggle_heart',
+	// 'cell_toggle_mute'
+	//   ];
+	
+	
+$(document).ready(function() {
+  function playlist_info(event) {
+	  $('#playlist_info_content').jqmShow();
+  }
+  function playlist_oldest(event) {}
+  function playlist_previous(event) {}
+  function playlist_next(event) {}
+  function playlist_newest(event) {}
+  function row_load(event) {
+	  console.log(event.target);
+  }
+  function row_reload(event) {}
+  function row_play(event) {
+	  $(event.target).closest('tr').find('audio').map(function () { 
+		  pause_and_reset_playhead_if_playing(this);
+		  $(this).unbind('ended');
+		  this.play()
+		});
+  }
+  function row_play_looped(event) {
+	  $(event.target).closest('tr').find('audio').each(function () { 
+		  pause_and_reset_playhead_if_playing(this);
+		  $(this).bind('ended',{},function() {
+			  $(this).trigger('play');
+		  });
+		  this.play();
+		});
+  }
+  function row_pause(event) {
+	  $(event.target).closest('tr').find('audio').map(function () {this.pause()});
+  }
+
+  function row_stop(event) {
+	  row_pause(event);
+	  $(event.target).closest('tr').find('audio').each(function () {
+		  this.currentTime = 0;
+		});
+  }
+
+
+  ///////////////// HELPER FUNCTIONS BEGIN
+  function pause_and_reset_playhead_if_playing(audio_inst) {
+	  if(!audio_inst.paused) {
+		  audio_inst.pause();
+		  audio_inst.currentTime = 0;
+	  }
+  }
+  ///////////////// HELPER FUNCTIONS END
+
+
+	$(actions).each(function(index) {
+		$('.' + this).each(function() {
+      //console.info(this);
+      $(this).bind('click',{},eval(actions[index]));
+		})
+	})		
+  $('#playlist_info_content').jqm();
+});
+
+</script>
+	  <div class="loopoff_table_container" id="loopoff_table_1">
+		<h2>"bender 1" RC-50 snapshot</h2>
+	  <div class="f_right">
+				<span class="time_ago">taken 3 weeks ago May 7th</span>
+				<a class="icon playlist_info"><span>Playlist Info</span></a>
+				<div class="jqmWindow" id="playlist_info_content">
+					<a href="#" class="jqmClose">Close</a>
+					<hr />
+					THE CONTENT GOES HERE
+				</div>
+		</div>
+	<table>
+		<thead>
+		<tr class="tbl_chng">
+			<th>
+				<a class="icon playlist_oldest" href="http://google.com"><span>Oldest</span></a>
+				<a class="icon playlist_previous" href="http://google.com"><span>Previous</span></a>
+			</th>
+			<th></th>
+		  <th></th>
+			<th></th>
+			<th class="f_right">
+				<a class="icon playlist_next" href="http://google.com"><span>Next</span></a>
+				<a class="icon playlist_newest" href="http://google.com"><span>Newest</span></a>				
+			</th>
+		</tr>
+		<tr>
+			<th>Loop Sets</th>
+			<th>1</th>
+			<th>2</th>
+			<th>3</th>
+			<th><span class="f_right">Song Info</span></th>
+		</tr>
+		</thead>
+		<tbody>		
+			<tr>
+				<td>
+					<span class="f_left">
+						<a class="icon row_load"><span>Load this unloaded Row</span></a>
+						<input type="checkbox" value="" />
+						<span class="row_title">078</span>
+						<div class="row_progress">
+							<div class="row_load_bar" style="width: 100%;">
+								<div class="row_play_bar" style="width: 0%;"></div>
+							</div>
+						</div>											
+						<span class="row_misc"></span>
+					</span>
+					<span class="f_right">
+						<a class="icon row_stop"><span>Stop Row and Restore head to 0</span></a>
+						<a class="icon row_pause"><span>Pause Row</span></a>
+						<a class="icon row_play"><span>Play Row</span></a>
+						<a class="icon row_play_looped"><span>Play Row Looped</span></a>
+					</span>				
+				</td>
+				<td>
+					<audio src="<%= directory_cell_path(@directory,"0,1") %>"></audio>
+					<span class="f_left cell_title">Joe</span>
+					<span class="cell_misc">1235</span>
+					<span class="f_right">
+						<a class="icon sound_mute"><span>Un mute this loop</span></a>
+					  <a class="icon download_file" href="<%= directory_cell_path(@directory,"0,1") %>"><span>Download this file</span></a>
+					</span>
+				</td>
+				<td>
+					<audio src="/078_2.WAV"></audio>
+					<span class="f_left cell_title">Logan</span>
+					<span class="cell_misc">1235</span>
+					<span class="f_right">
+						<a class="icon sound_unmute"><span>Mute this loop</span></a>
+					  <a class="icon download_file" href="/078_2.WAV"><span>Download this file</span></a>
+					</span>
+				</td>
+				<td>
+					<audio src="/078_3.WAV"></audio>
+					<span class="f_left cell_title">Serg</span>
+					<span class="cell_misc">1232</span>
+					<span class="f_right">
+						<a class="icon sound_mute"><span>Un mute this loop</span></a>
+					  <a class="icon download_file" href="/078_3.WAV"><span>Download this file</span></a>
+					</span>
+
+				</td>
+				<td>
+					<span class="f_left cell_title">Raukus ripper for 5/27 show</span>
+					<span class="cell_misc"></span>
+					<span class="f_right">
+						<a class="icon heart"><span>I love this loop</span></a>
+						<a class="icon pencil"><span>Edit the notes and meta data about loop</span></a>
+					</span>
+				</td>
+			</tr>
+		<tr class="alt">
+			<td>
+				<span class="f_left">
+					<a class="icon row_reload"><span>Reload Row</span></a>
+					<input type="checkbox" value="" />
+					<span class="row_title">080</span>
+					<div class="row_progress">
+						<div class="row_load_bar" style="width: 100%;">
+							<div class="row_play_bar" style="width: 0%;"></div>
+						</div>
+					</div>											
+					<span class="row_misc"></span>
+				</span>
+				<span class="f_right">
+					<a class="icon row_play"><span>Play Row</span></a>
+					<a class="icon row_play_looped"><span>Play Row Looped</span></a>
+				</span>				
+			</td>
+			<td>
+				<span class="f_left cell_title">Logan</span>
+				<span class="cell_misc">1234</span>
+				<span class="f_right"><a class="icon sound_mute"><span>Un mute this loop</span></a></span>
+			</td>
+			<td>
+				<span class="f_left cell_title">Joe</span>
+				<span class="cell_misc">1235</span>
+				<span class="f_right"><a class="icon sound_mute"><span>Un mute this loop</span></a></span>
+			</td>
+			<td>
+				<span class="f_left cell_title">Serg</span>
+				<span class="cell_misc">1232</span>
+				<span class="f_right"><a class="icon sound"><span>Mute this loop</span></a></span>
+			</td>
+			<td>
+				<span class="f_left cell_title">Raukus ripper for 5/27 show</span>
+				<span class="cell_misc"></span>
+				<span class="f_right">
+					<a class="icon heart"><span>I love this loop</span></a>
+					<a class="icon pencil"><span>Edit the notes and meta data about loop</span></a>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<span class="f_left">
+					<a class="icon row_reload"><span>Reload Row</span></a>
+					<input type="checkbox" value="" />
+					<span class="row_title">078</span>
+					<div class="row_progress">
+						<div class="row_load_bar" style="width: 100%;">
+							<div class="row_play_bar" style="width: 50%;"></div>
+						</div>
+					</div>											
+					<span class="row_misc"></span>
+				</span>
+				<span class="f_right">
+					<a class="icon row_pause"><span>Pause Row</span></a>
+					<a class="icon row_play_looped"><span>Play Row Looped</span></a>
+				</span>				
+			</td>
+			<td>
+				<span class="f_left cell_title">Logan</span>
+				<span class="cell_misc">1234</span>
+				<span class="f_right"><a class="icon sound_mute"><span>Un mute this loop</span></a></span>
+			</td>
+			<td>
+				<span class="f_left cell_title">Joe</span>
+				<span class="cell_misc">1235</span>
+				<span class="f_right"><a class="icon sound_mute"><span>Un mute this loop</span></a></span>
+			</td>
+			<td>
+				<span class="f_left cell_title">Serg</span>
+				<span class="cell_misc">1232</span>
+				<span class="f_right"><a class="icon sound"><span>Mute this loop</span></a></span>
+			</td>
+			<td>
+				<span class="f_left cell_title">Raukus ripper for 5/27 show</span>
+				<span class="cell_misc"></span>
+				<span class="f_right">
+					<a class="icon heart"><span>I love this loop</span></a>
+					<a class="icon pencil"><span>Edit the notes and meta data about loop</span></a>
+				</span>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	</div>
+<%= link_to 'Edit', edit_directory_path(@directory) %> |
+<%= link_to 'Back', directories_path %>

@@ -1,0 +1,7 @@
+<body>
+<%- unless @export_mode -%>
+  <p style="color: green"><%= flash[:notice] %></p>
+<%- end -%>
+<%= yield %>
+
+</body>

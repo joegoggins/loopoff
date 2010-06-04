@@ -1,0 +1,36 @@
+need a "export selected and clear checkboxes" keyboard short cut,
+screen should not move at all from the current point of focus in the table,
+a simple growl like "files copies..." message would suffice
+
+limit the number of loaded <audio> tags by only having a single 3-tuple of
+Audio instances (only for the currently selected row), browsers seem to get pissed when there are too many
+
+it would be badass to have a mark next to any file that was already in the export target
+i find myself constantly looking at these files via the terminal, browser should provide someting as handy
+
+force selection of a valid export dir that is not the same as the source for any export functionality to
+work (export_page and export_selected)
+
+the load row icon should be displayed instead of the stop|pause|play|play_looper when a row is not loaded
+
+there should be a default export directory like LoopoffExport and directories
+get autocreated if an explicit output target is not specified,
+the OUTPUT <select> should default to "autocreate dir"
+
+each playlist should remember what the currently selected row is persistently
+
+none of the links with js behaviors should actually go anywhere (aka return false)
+
+look for readme.yml (case insensitive) and overlay meta data from this onto files
+
+only one row can play at a time, when play is hit on another row, playback stops the other one first
+then resumes
+
+clear all checkboxes and select all
+
+all controllable widgets in the .controller_cell should be as close together as possible
+to make the mouse usage as painless as possible
+
+IN SAFARI
+
+  There is a small gap at the end of the loop when in loop play mode
