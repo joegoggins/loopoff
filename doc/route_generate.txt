@@ -1,0 +1,6 @@
+script/scaffold x name:string
+script/controller db_loader_controller
+script/controller dbs_controller show index
+script/controller archive_controller show loopoff
+script/controller archive_cell_controller show
+script/controller unarchived_controller show loopoff

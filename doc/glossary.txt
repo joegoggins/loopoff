@@ -1,0 +1,3 @@
+Loopoff Project Dir: a sub-dir of loop_db with 3 sub-folders: export, import, repo (git repo)
+
+Loopoff Table: An HTML5 + <audio> view of a collection of files that can be looped

@@ -1,0 +1,24 @@
+ARCHIVE
+          db_blobs_loopoff {:controller=>"loopoffs", :action=>"show"} ArchiveLoopoffController show   # the uber loop page
+             db_blobs_cell {:controller=>"cells", :action=>"show"}    ArchiveBlobCellController show  # binary data
+                  db_blobs {:controller=>"blobs", :action=>"show"}    ArchiveBlobsController show     # ls of all unique files in archive
+
+UNARCHIVED
+db_unarchived_path_loopoff {:controller=>"loopoffs", :action=>"show"} UnarchivedLoopoffController show  # loopoff table of an unarchived directory
+   db_unarchived_path_cell {:controller=>"cells", :action=>"show"}    UnarchivedPathCellController show # binary data
+       db_unarchived_paths {:controller=>"unarchived", :action=>"index"} UnarchivedPathsController index # list of all relative paths in db that contains .wav's
+        db_unarchived_path {:controller=>"unarchived", :action=>"show"}  UnarchivedPathsController show # ls of all files in directory
+
+SNAPSHOTS
+    db_commit_path_loopoff {:controller=>"loopoffs", :action=>"show"} SnapshotLoopoffController show         # loopoff table for a commit id and relative path
+       db_commit_path_cell {:controller=>"cells", :action=>"show"}    SnapshotCommitPathCellController show  # binary data
+            db_commit_path {:controller=>"paths", :action=>"show"}    SnapshotCommitPathController show      # ls of files in this commit for the specified path
+                db_commits {:controller=>"commits", :action=>"index"} SnapshotsController index              # ls of all commits like `git log`
+                 db_commit {:controller=>"commits", :action=>"show"}  SnapshotsController show     # links to all paths in this commit, or redirect if path is "."
+
+ENTRY
+                       dbs {:controller=>"dbs", :action=>"index"}     DbsController index # list of all dbs (aka sub-dirs of loop_db)
+                        db {:controller=>"dbs", :action=>"show"}      DbsController show  # shit tons of links: 
+																																														  to archive loopoff page 
+																																														  to all unarchived loop off pages
+																																														  to all snapshot loop off pages
