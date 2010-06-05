@@ -1,0 +1,47 @@
+
+20090415 by itself is
+93Mb
+after git add
+149Mb
+after git commit
+149Mb
+
+after git co -b pre_20090529
+149Mb
+
+after rm *, cp 20090529, git add, rm *, git reset --hard HEAD ...strange
+170Mb
+
+rm *, cp ../20090529/* ., git add *
+111M
+
+cp ~/Music/LoopoffExport/exp_20090415/008_* .
+git add 008_*
+115M
+
+git ci -a -m "Added 20090529 plus 008_* identicals to see if I can find them"
+115M
+ 
+
+$> cd ~/Music/loopoff/repo/rc50
+$> ls
+20090415 20090529
+$> du -sh .
+128M	.
+$> git init
+Initialized empty Git repository in /Users/goggins/Music/loopoff/rc50/repo/.git/
+$> du -sh .
+128M	.
+$> du -sh 20090415/
+ 93M	20090415
+$> git add 20090415
+$> du -sh
+184M	.
+$> git ci -m "Booya, first commit of filtered down goodness from the RC-50 "
+$> du -sh
+184M	.
+$> du -sh 20090529/
+ 34M	20090529/
+$> git add 20090529/
+$> du -sh
+204M	.

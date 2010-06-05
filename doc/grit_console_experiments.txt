@@ -1,0 +1,38 @@
+# THIS WORKS for finding identicals compared to the HEAD of master
+# I verified that this does NOT find identicals of committed content
+# that has been deleted from master head
+r.tree('pre_20090529').blobs.each do |blob|
+  if r.tree('master').blobs.map {|x| x.id}.include?(blob.id)
+    print "Identical "
+  else
+    print "New file "
+  end
+  print blob.name
+  puts
+end
+
+
+
+# THIS WORKS, 
+@r = Grit::Repo.new('loop_db/rc50/repo')
+@blob_ids_in_master_head = @r.tree('master').blobs.map {|x| x.id}
+@blob_ids_in_import_branch = @r.tree('pre_20090529').blobs.map {|x| x.id}
+@all_blob_ids_in_master = []
+@r.commits.each do |c|
+  c.tree.blobs.each do |b|
+    @all_blob_ids_in_master << b.id
+  end
+  @all_blob_ids_in_master.uniq!
+end
+
+
+@blob_ids_in_common_with_master_head = @blob_ids_in_import_branch & @blob_ids_in_master_head
+@blob_ids_in_common_with_anything = @blob_ids_in_import_branch & @all_blob_ids_in_master
+@blobs_in_common_with_anything =[]
+@blob_ids_in_common_with_anything.each do |bid|
+  @blobs_in_common_with_anything << @r.blob(bid)
+end
+
+# CONTINUE HERE, @blobs_in_common_with_anything.first.name => nil
+  why, you can still get the data, but the file name, perhaps that is associated with the tree...
+  NOT SURE.  The first part of this code should pull actual blobs instead of IDs...
