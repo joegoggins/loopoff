@@ -1,0 +1,82 @@
+/
+ a link to /db
+
+db/
+  a list of all loopoff project directories (all sub-dirs of loop_db)
+  each one links to a 
+  <sub_dir_name> <export_link> <import_link> <newest_commit> <all_repo_files>
+    export_link takes you to dir/export/<rel_path>/loopoff
+      where <rel_path> is a dir containing the file with the most recent data modified
+    import_link => same logic as export_link
+    all_repo_files takes you to db/rc50/files/loopoff
+    newest_commit takes you to db/rc50/commits/<sha>/loopoff
+      where <sha> is the most recent commit
+
+db/rc50
+  links to 
+  db/rc50/archive
+  db/rc50/archive/loopoff
+  
+db/rc50/archive
+  list all files in rc50 repo, their sha1
+  <f_name><sha><date_committed><size>
+
+db/rc50/archive/loopoff
+  loopoff table view of all files in the rc50 repo
+
+db/rc50/unarchived/
+  a list of all non repo directories with links to their loopoff table pages
+
+db/rc50/unarchived/<rel_path>/loopoff
+  loopoff table page of files in <rel_path>
+
+db/rc50/commits
+  list view of all commits in the repo
+  <date_committed><72 files changed, 31 insertions(+), 0 deletions(-)>
+
+  each line links to a detail page db/rc50/commits/<sha>/
+
+db/rc50/commits/<sha>/
+  shows something like:
+	commit b8491d654fa5ea9b5fb9e9ba77ffbfc560b9c263
+	Author: Joe Goggins <joe.goggins@gmail.com>
+	Date:   Fri Jun 4 13:07:46 2010 -0500
+
+	    commit_index from grit
+
+	 008_1.WAV |  Bin 0 -> 1411244 bytes
+	 008_2.WAV |  Bin 0 -> 1411244 bytes
+   ... 
+
+db/rc50/commits/<sha>/loopoff
+  a loopoff table with the files in this commit
+
+The same logic would hold for db/rc50/tags/<tag>/loopoff and db/rc50/tags as */commits/*
+
+
+ActionController::Routing::Routes.draw do |map|
+  map.resources :project_dirs, 
+    :as => 'db', 
+    :only => [:index, :show] do |project_dir|
+      project_dir.resources :repo_files, :as => 'archive', 
+        :only => [:index],
+        :collection => {:loopoff => :get}
+      project_dir.namespace :unarchived do |unarchived|
+        unarchived.resources :files, :only => [:index,:show]
+      end
+  end
+  
+  map.resources :dir_types, :as => "dir", :only => :show, do |dir_type|
+    dir_type.resources :directories
+  end
+  map.resources :directories, :as => "dir"
+    :member => {
+      :export_page_of => :get,
+      :process_export_page_of => :post,
+      :export_selected_rows => :get
+      
+      } do |directory|
+    directory.resources :cells, :only => :show # serves the .wav files up
+  end
+end
+
