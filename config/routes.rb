@@ -1,4 +1,44 @@
 ActionController::Routing::Routes.draw do |map|
+  # # :index db/ => A list of all loop off project dirs with links
+  # # :show db/rc50 => links to db/rc50/archive, db/rc50/archive/loopoff, db/rc50/unarchived
+  # #
+  # map.resources :dbs, :as => 'db', :only => [:index,:show] do |db|
+  #   # :show      db/rc50/archive => list all files in rc50 repo, their sha1...each line like <f_name><sha><date_committed><size>
+  #   #            No links initially (LOW PRIORITY)
+  #   # :loopoff   db/rc50/archive/loopoff => THE MOST IMPORTANT PAGE IN THE ENTIRE APP, the uber loopoff table
+  #   #            containing all loops
+  #   db.resource :blobs, :as => 'archive', :only => :show do |repo_file|
+  #     repo_file.resource :loopoff, :only => :show
+  #     # :cells   db/rc50/archive/cells/0,1 => serves up the binary audio data associated with row 0 column 1...
+  #     #
+  #     repo_file.resources :cells, :only => :show
+  #   end
+  #   # :show      db/rc50/unarchived => A list of all non repo dir paths in loop_db/rc50/* that contain .WAV files
+  #   #            with links to their loopoff page, something like
+  #   #            <rel_dir_name><number_of_files><link to table>
+  #   #
+  #   # :loopoff   db/rc50/unarchived/loopoff/import/20090529 => A loopoff table with the contents of the directory
+  #   db.resources :unarchived_paths, :as => 'unarchived', :controller => 'unarchived',:only => [:index, :show] do |unarchived_path|
+  #     unarchived_path.resource :loopoff, :only => :show
+  #     unarchived_path.resources :cells, :only => :show
+  #   end
+  #   # :index     db/rc50/commits => list view of all commits in the repo like
+  #   #            <date_committed><72 files changed, 31 insertions(+), 0 deletions(-)>
+  #   #            each line links to a commit detail page db/rc50/commits/<sha>/
+  #   # :show      db/rc50/commits/b8491d65 => Links to available subpathes within the checkout (any dir with loopoff-able files aka .WAVs)
+  #   #           plus committ id and commit time and message
+  #   # :loopoff  db/rc50/snapshots/b8491d65/paths/./loopoff => a loopoff table with the files in this commit
+  #   #           if sub directories in this
+  #   db.resources :commits, :as => 'snapshots', :only => [:index, :show] do |commit|
+  #     commit.resources :paths,  :only => :show do |path|
+  #       path.resource :loopoff, :only => :show
+  #       path.resources :cells, :only => :show
+  #     end
+  #   end
+  # end
+  
+  #
+  
   map.resources :directories, 
     :member => {
       :export_page_of => :get,
@@ -9,45 +49,4 @@ ActionController::Routing::Routes.draw do |map|
     directory.resources :cells, :only => :show # serves the .wav files up
   end
 
-  # The priority is based upon order of creation: first created -> highest priority.
-
-  # Sample of regular route:
-  #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'
-  # Keep in mind you can assign values other than :controller and :action
-
-  # Sample of named route:
-  #   map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
-  # This route can be invoked with purchase_url(:id => product.id)
-
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   map.resources :products
-
-  # Sample resource route with options:
-  #   map.resources :products, :member => { :short => :get, :toggle => :post }, :collection => { :sold => :get }
-
-  # Sample resource route with sub-resources:
-  #   map.resources :products, :has_many => [ :comments, :sales ], :has_one => :seller
-  
-  # Sample resource route with more complex sub-resources
-  #   map.resources :products do |products|
-  #     products.resources :comments
-  #     products.resources :sales, :collection => { :recent => :get }
-  #   end
-
-  # Sample resource route within a namespace:
-  #   map.namespace :admin do |admin|
-  #     # Directs /admin/products/* to Admin::ProductsController (app/controllers/admin/products_controller.rb)
-  #     admin.resources :products
-  #   end
-
-  # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  map.root :controller => "directories"
-
-  # See how all your routes lay out with "rake routes"
-
-  # Install the default routes as the lowest priority.
-  # Note: These default routes make all actions in every controller accessible via GET requests. You should
-  # consider removing or commenting them out if you're using named routes and resources.
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
 end
