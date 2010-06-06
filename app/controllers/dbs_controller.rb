@@ -1,10 +1,10 @@
-class DbsController < ApplicationController
+class DbsController < Loader::DbController
+  skip_before_filter :load_db, :only => :index
   def index
-    @dbs = ['rc50']
+    @dbs = Db.all
   end
 
   def show
-    @db = "rc50"
   end
 
 end

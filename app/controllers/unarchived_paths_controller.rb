@@ -1,4 +1,4 @@
-class UnarchivedPathsController < ApplicationController
+class UnarchivedPathsController < Loader::DbController
   def index
   end
 

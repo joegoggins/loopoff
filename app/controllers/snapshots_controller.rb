@@ -1,4 +1,4 @@
-class SnapshotsController < ApplicationController
+class SnapshotsController < Loader::DbController
   def index
   end
 

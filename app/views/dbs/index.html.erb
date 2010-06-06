@@ -1,2 +1,6 @@
-<h1>Dbs#index</h1>
-<p><%= link_to "Show rc50 STATIC", db_path("rc50") %></p>
+<h1>Listing all Loopoff Dbs</h1>
+<ul>
+	<%- @dbs.each do |db| -%>
+	<li><%= link_to db.name,db_path(db) %></li>
+	<%- end -%>
+</ul>
