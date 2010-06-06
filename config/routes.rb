@@ -27,10 +27,10 @@ ActionController::Routing::Routes.draw do |map|
     #           plus committ id and commit time and message
     # :loopoff  db/rc50/snapshots/b8491d65/paths/./loopoff => a loopoff table with the files in this commit
     #           if sub directories in this
-    db.resources :commits, :as => 'snapshots', :only => [:index, :show] do |commit|
-      commit.resources :paths,  :only => :show do |path|
-        path.resource :loopoff, :only => :show
-        path.resources :cells, :only => :show
+    db.resources :commits, :as => 'snapshots', :only => [:index, :show], :controller => 'snapshots' do |commit|
+      commit.resources :paths,  :only => :show, :controller => 'snapshot_commit_path' do |path|
+        path.resource :loopoff, :only => :show, :controller => 'snapshot_loopoff'
+        path.resources :cells, :only => :show, :controller => 'snapshot_commit_path_cell'
       end
     end
   end
