@@ -1,4 +1,6 @@
 <h1>Listing all unarchived paths with loopoff files </h1>
-<p><%= link_to "Unarchived loopoff for 20090529", db_unarchived_path_loopoff_path('rc50',"20090529")%></p>
-<p><%= link_to "Unarchived loopoff for logan and serg", db_unarchived_path_loopoff_path('rc50',"export/for_logan_and_serg")%></p>
-
+<ul>
+<%- @unarchived_paths.each do |p| -%>
+  <li><%= link_to p.name, db_unarchived_path_loopoff_path(@db,p)  %></li>
+<%- end -%>
+</ul>
