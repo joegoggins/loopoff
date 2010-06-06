@@ -3,15 +3,13 @@ ActionController::Routing::Routes.draw do |map|
   # # :show db/rc50 => links to db/rc50/archive, db/rc50/archive/loopoff, db/rc50/unarchived
   # #
   map.resources :dbs, :as => 'db', :only => [:index,:show] do |db|
-    # :show      db/rc50/archive => list all files in rc50 repo, their sha1...each line like <f_name><sha><date_committed><size>
-    #            No links initially (LOW PRIORITY)
     # :loopoff   db/rc50/archive/loopoff => THE MOST IMPORTANT PAGE IN THE ENTIRE APP, the uber loopoff table
     #            containing all loops
-    db.resource :blobs, :as => 'archive', :only => :show do |repo_file|
-      repo_file.resource :loopoff, :only => :show
+    db.resource :blobs, :as => 'archive', :only => :none do |repo_file|
+      repo_file.resource :loopoff, :only => :show, :controller => 'archive_loopoff'
       # :cells   db/rc50/archive/cells/0,1 => serves up the binary audio data associated with row 0 column 1...
       #
-      repo_file.resources :cells, :only => :show
+      repo_file.resources :cells, :only => :show, :controller => 'archive_blob_cell'
     end
     # :index      db/rc50/unarchived => A list of all non repo dir paths in loop_db/rc50/* that contain .WAV files
     #            with links to their loopoff page, something like

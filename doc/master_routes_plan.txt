@@ -4,9 +4,9 @@ ARCHIVE
                   db_blobs {:controller=>"blobs", :action=>"show"}    ArchiveBlobsController show     # ls of all unique files in archive
 
 									GENERATE
-									controller ArchiveLoopoffController show
-									controller ArchiveBlobCellController show
-									controller ArchiveBlobsController show
+									controller ArchiveLoopoff show
+									controller ArchiveBlobCell show
+									controller ArchiveBlobs show
 
 UNARCHIVED
 db_unarchived_path_loopoff {:controller=>"loopoffs", :action=>"show"} UnarchivedLoopoffController show  # loopoff table of an unarchived directory
