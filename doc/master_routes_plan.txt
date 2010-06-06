@@ -41,5 +41,6 @@ ENTRY
 																																														  to all unarchived loop off pages
 																																														  to all snapshot loop off pages
 GENERATE
-controller Main index
+
 controller Dbs index show
+controller Main index
