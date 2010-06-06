@@ -24,6 +24,11 @@ class Db < Dir
     self.name
   end
   
+  
+  def repo
+    @repo ||= Repo.new(self.path + '/repo')
+  end
+  
   # any dir containing wav files that's not in /repo
   def unarchived_paths
     returning [] do |t|

@@ -1,2 +1,13 @@
 <h1>Listing paths in this snapshot</h1>
-<%= link_to "Loopoff &quot;.&quot;", db_commit_path_loopoff_path('rc50','d576e9ea','-') %>
+<ul>
+<%- @commit_paths.each do |cp| -%>
+  <li><%= link_to "Loopoff &quot;#{cp.first}&quot;", db_commit_path_loopoff_path(@db,@commit.sha,cp.last) %></li>
+<%- end -%>
+</ul>
+<h2>Diff Stats</h2>
+<ul>
+<% @diff_stats.each do |s| %>
+  <li><%= s.inspect %></li>
+<%- end -%>
+</ul>
+
