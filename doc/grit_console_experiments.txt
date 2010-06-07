@@ -36,3 +36,7 @@ end
 # CONTINUE HERE, @blobs_in_common_with_anything.first.name => nil
   why, you can still get the data, but the file name, perhaps that is associated with the tree...
   NOT SURE.  The first part of this code should pull actual blobs instead of IDs...
+
+
+@r = Db.first.repo.all_blobs
+@r.tree.blobs
