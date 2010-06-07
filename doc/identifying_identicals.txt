@@ -1,0 +1,25 @@
+cd the_dir_to_import
+git init
+git add *
+git ci -m "boom"
+cd ../repo
+git remote add d1 ../the_dir_to_import
+git rm *
+git fetch d1 master
+
+git diff d1/master --stat # show me the new stuff comin in
+ 010_1.WAV |  Bin 871156 -> 0 bytes
+  ...
+git co -b "d1_local" -t d1/master # make a new local branch attached to the remote repo d1/master and checkout to it
+
+
+
+
+
+Db.compare('x7')
+{
+:new => ['010_1.WAV','010_2.WAV']
+:identical => ['012_1.WAV']
+}
+
+Db.first.repo.tree('master').blobs - Db.first.repo.tree('d1_local').blobs
