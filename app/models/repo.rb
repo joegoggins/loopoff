@@ -14,16 +14,7 @@ class Repo < Grit::Repo
   end
   
   def all_distinct_blobs_aggregated
-    # returning [] do |t|
-    #   self.commits.each do |c|
-    #     tree_blobs = []
-    #     c.tree.blobs.each do |b|
-    #       tree_blobs << b
-    #     end
-    #     t << tree_blobs
-    #   end
-    #         
-    # end
-    # self.all_distinct_blobs.group_by {|x| x.name.split('_').first}.sort.delete_if {|x| x.first.match /\./}
+    #                                  #  (DDD)_N.WAV                                                #  Blob file names are wavs
+    self.all_distinct_blobs.group_by {|x| x.name.split('_').first}.sort.delete_if {|x| x.last.any? {|y| !y.name.match(/\.WAV/i)}}
   end
 end
