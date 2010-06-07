@@ -1,0 +1,73 @@
+
+The audio archive is going to grow and grow and grow...periodically there
+will be a need to delete something old to free up space...this seems to work:
+inspired from:
+http://stackoverflow.com/questions/1216733/remove-a-directory-permanently-from-git
+http://www.kernel.org/pub/software/scm/git/docs/git-filter-branch.html
+http://www.kernel.org/pub/software/scm/git/docs/git-rm.html
+
+
+$> mkdir qwer
+$> cd qwer/
+$> git init
+Initialized empty Git repository in /Users/goggins/Personal/loopoff/loop_db/rc50/qwer/.git/
+$> du -sh
+ 60K	.
+$> vim 1
+$> git add 1
+$> git ci -a -m "
+> asdf"
+[master (root-commit) ea46e6d] asdf
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+ create mode 100644 1
+$> du -sh
+ 96K	.
+$> vim 2
+$> git add 2
+$> git ci -a -m "asdf"
+[master f1204b4] asdf
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+ create mode 100644 2
+$> git filter-branch --index-filter 'git rm --cached --ignore-unmatch 1'
+Rewrite ea46e6dfa772a182d65efb5fb81532e062c3c147 (1/2)rm '1'
+Rewrite f1204b48d63ea3cc6b639ef7973ef8055da1c132 (2/2)rm '1'
+
+Ref 'refs/heads/master' was rewritten
+$> git log
+commit 25d7bf566ecc9bf74ab871314fbbe02aa068f0b2
+Author: Joe Goggins <goggins@umn.edu>
+Date:   Mon Jun 7 14:43:15 2010 -0500
+
+    asdf
+
+commit 775618b6b528f89bf6e8f84925692852eea41619
+Author: Joe Goggins <goggins@umn.edu>
+Date:   Mon Jun 7 14:42:56 2010 -0500
+
+    asdf
+$> ls
+2
+$> git co 
+$> du -sh
+128K	.
+$> rm -Rf .git/refs/original
+$> rm -Rf .git/logs/
+$> du -sh
+116K	.
+$> git gc
+Counting objects: 5, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (5/5), done.
+Total 5 (delta 0), reused 0 (delta 0)
+$> git prune --expire=now
+$> du -sh
+ 92K	.
+$> git co 775618b6b528f89bf6e8f84925692852eea41619
+Note: moving to '775618b6b528f89bf6e8f84925692852eea41619' which isn't a local branch
+If you want to create a new branch from this checkout, you may do so
+(now or later) by using -b with the checkout command again. Example:
+  git checkout -b <new_branch_name>
+HEAD is now at 775618b... asdf
+$> ls
+NOTHING...no longer there.
