@@ -1,0 +1,86 @@
+Since this app is using git as a DB, I need a way to
+associate structured information with files added to the archive/repo.
+
+This is inspired from this thread:
+http://www.mail-archive.com/git-users@googlegroups.com/msg00465.html
+
+I like this idea:
+
+use prepare-commit-msg to pre-pop the msg with a listing of all files in
+the commit structured with YAML.  The whole loopoff application would run from
+YAML formatted messages from the commit message.
+  ordering, file grouping (row name), track notes would happen here
+  
+Basically the commit message tells loop off how to interpret and see the files.
+We need a thin layer between the git files and the app, (preferably without a db)
+I think this could suffice...
+
+INITIAL COMMIT MSG:
+--- 
+- 010_1.WAV
+- 010_2.WAV
+- 013_1.WAV
+- 013_2.WAV
+- 013_3.WAV
+- 015_1.WAV
+- 015_2.WAV
+- 015_3.WAV
+- 018_1.WAV
+- 018_2.WAV
+- 018_3.WAV
+- 019_1.WAV
+- 019_2.WAV
+- 019_3.WAV
+- 022_1.WAV
+- 022_2.WAV
+- 084_1.WAV
+- 084_2.WAV
+- 084_3.WAV
+- 085_1.WAV
+- 085_2.WAV
+- 085_3.WAV
+- 086_1.WAV
+- 086_2.WAV
+- 086_3.WAV
+- 088_1.WAV
+- 088_2.WAV
+- 088_3.WAV
+
+MODIFIED:
+--- 
+- 010_1.WAV
+- tag_1_above: Logan rockin it
+- 010_2.WAV
+- group_2_above:
+  title: Joe and Logans killer song
+- 013_1.WAV
+- 013_2.WAV
+- 013_3.WAV
+- 015_1.WAV
+- 015_2.WAV
+- 015_3.WAV
+- 018_1.WAV
+- 018_2.WAV
+- 018_3.WAV
+- 019_1.WAV
+- 019_2.WAV
+- 019_3.WAV
+- 022_1.WAV
+- 022_2.WAV
+- 084_1.WAV
+- 084_2.WAV
+- 084_3.WAV
+- 085_1.WAV
+- 085_2.WAV
+- 085_3.WAV
+- 086_1.WAV
+- 086_2.WAV
+- 086_3.WAV
+- 088_1.WAV
+- 088_2.WAV
+- 088_3.WAV
+
+This would get parsed in the app like this:
+=> ["010_1.WAV", {"tag_1_above"=>"Logan rockin it"}, "010_2.WAV", {"title"=>"Joes killer song", "group_2_above"=>nil}, "013_1.WAV", "013_2.WAV", "013_3.WAV", "015_1.WAV", "015_2.WAV", "015_3.WAV", "018_1.WAV", "018_2.WAV", "018_3.WAV", "019_1.WAV", "019_2.WAV", "019_3.WAV", "022_1.WAV", "022_2.WAV", "084_1.WAV", "084_2.WAV", "084_3.WAV", "085_1.WAV", "085_2.WAV", "085_3.WAV", "086_1.WAV", "086_2.WAV", "086_3.WAV", "088_1.WAV", "088_2.WAV", "088_3.WAV"]
+
+Yes, I could definitely see this working quite well and would simplify things in LoopOff...the commit message informs how the app should display things.
