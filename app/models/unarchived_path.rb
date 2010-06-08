@@ -30,19 +30,11 @@ class UnarchivedPath < Dir
     self.distinct_blob_ids & self.db.repo.all_distinct_blobs.map(&:id)
   end
   
-  # makes a .git repo if not already created
+  # Requires you to manually create the repo for now, Grit and Gash
+  # were being dumb, raises
+  #   Grit::InvalidGitRepositoryError => e
   def repo
-    begin
-      @repo ||= Grit::Repo.new(self.path)
-    rescue Grit::InvalidGitRepositoryError => e
-      raise "Sorry, gotta do this manually for now"
-      # c =`cd #{self.path} && git init`
-      # t = `#{c}`
-      # puts c
-      # puts t
-      # @repo = Grit::Repo.new(self.path)
-      #@repo = Grit::Repo.init_bare(File.join(self.path,'.git'))
-    end
+    @repo ||= Grit::Repo.new(self.path)
   end
   
   # WARNING DUPLICATION: from repo.rb
