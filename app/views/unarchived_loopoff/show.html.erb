@@ -73,6 +73,7 @@ HERE WE GO!
 				    <td style="opacity: 0.3; font-size: .65em">n/a</td>
 				  <%- else -%>				  
 				    <td class="audio_cell" id="c<%= "#{cell.x}_#{cell.y}" %>" rel="<%# CONTINUE HERE db_unarchived_path_cell_path(@db,@unarchived_path,cell) %>">
+					    <span><%= "#{@db.to_param}/#{@unarchived_path.to_param}/#{cell.to_param}" %></span>
 							<span class="f_left cell_title"></span>
 							<span class="cell_misc"></span>
 							<span class="f_right">

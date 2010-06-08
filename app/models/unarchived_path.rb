@@ -100,10 +100,9 @@ class UnarchivedPath < Dir
         @row.name = tuple.first
         #["001", [#<Grit::Blob "48b4a7f76b059fe8ec04389ff90ca303b6180265">, #<Grit::Blob "3135902f33f339b671e9d2604a3c90f12280409b">, #<Grit::Blob "bc22f5ca84204a9b53ad3f14586fad23a72ed6d4">]]        tuple
         tuple.last.each_with_index do |blob,cell_index|
-          @cell = Lt::Cell.new(@row, blob_index,cell_index,blob.name)
-          @row.cells << @cell.dup          
+          @row.cells << Lt::Cell.new(@row, blob_index,cell_index,blob.id)
         end
-        @table.rows << @row.dup
+        @table.rows << @row.clone
         #prefix, middle, extension = b.name.match(/(.+)_(.+)\.(.+)/).to_a[1..-1] 
       end 
     end
