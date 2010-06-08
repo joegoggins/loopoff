@@ -21,7 +21,7 @@ class UnarchivedLoopoffController < Loader::DbController
   end
 
   def show
-    @new_blobs = @unarchived_path.new_blobs
-    render :inline => '<%= debug @new_blobs %>'
+    @table = @unarchived_path.table
+    render :inline => '<%= debug @aggregated_blobs %>'
   end
 end

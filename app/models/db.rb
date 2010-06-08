@@ -24,9 +24,13 @@ class Db < Dir
   #
   def self.loopoff_files(full_paths_to_files)
     full_paths_to_files.select do |x|
-      # TODO: add x.match(/README/) when ready
-      (x.match(/.WAV/)) && File.file?(x)
+      self.is_loopoff_file?(x)
     end
+  end
+  
+  def self.is_loopoff_file?(full_path_to_file)
+    # TODO: add x.match(/README/) when ready
+    (x.match(/.WAV/i)) && File.file?(x)
   end
   
   def name
@@ -37,11 +41,10 @@ class Db < Dir
     self.name
   end
   
-  
   def repo
     @repo ||= Repo.new(self.path + '/repo')
   end
-  
+    
   # any dir containing wav files that's not in /repo
   def unarchived_paths(*args)
     t = []
@@ -65,4 +68,25 @@ class Db < Dir
     end
     return t
   end
+  
+  
+  ######## RC50 SPECIFIC CRAP BEGIN
+  def aggregate_blobs(blobs)
+
+    #     blobs.sort(&:name).each do |blob|
+    #       
+    #     end
+    #     grouped_by_file_prefix = blobs.group_by do |blob|
+    #       blob.name.split('_').first
+    #     end
+    debugger
+    #    self.distinct_blobs.group_by {|x| x.name.split('_').first}.sort.delete_if {|x| x.last.any? {|y| !y.name.match(/\.WAV/i)}}    
+        # grou
+        # #                                  #  (DDD)_N.WAV                                                #  Blob file names are wavs
+        # .sort.delete_if {|x| x.last.any? {|y| !y.name.match(/\.WAV/i)}}
+        # end 
+    
+    blobs.group_by {|x| x.name.split('_').first}.sort.delete_if {|x| x.last.any? {|y| !y.name.match(/\.WAV/i)}}    
+  end
+  ######## RC50 SPECIFIC CRAP END
 end
