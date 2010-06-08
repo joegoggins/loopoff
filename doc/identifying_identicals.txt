@@ -1,3 +1,16 @@
+STEPS/tasks
+
+identify identicals
+
+rake import 20090529
+Identicals
+  ...
+New
+  ...
+Hit y to import new to repo: 
+
+
+
 cd the_dir_to_import
 git init
 git add *
