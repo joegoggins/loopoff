@@ -15,7 +15,7 @@ class UnarchivedPath < Dir
   end
   
   def new_blob_ids
-    self.distinct_blob_ids - self.db.repo.all_distinct_blobs.map(&:id)
+    self.distinct_blob_ids - self.db.repo.distinct_blobs.map(&:id)
   end
 
   def new_blobs
@@ -27,7 +27,7 @@ class UnarchivedPath < Dir
   end
   
   def idential_blob_ids
-    self.distinct_blob_ids & self.db.repo.all_distinct_blobs.map(&:id)
+    self.distinct_blob_ids & self.db.repo.distinct_blobs.map(&:id)
   end
   
   # Requires you to manually create the repo for now, Grit and Gash
