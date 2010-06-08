@@ -1,0 +1,35 @@
+DIFFERENT SHAS with Digest::SHA1 use Grit::GitRuby::Internal::LooseStorage.calculate_sha(File.read(f),'blob') instead
+
+f='/Users/goggins/Projects/personal/loopoff/loop_db/rc50/20090529/010_1.WAV'
+puts Digest::SHA1.hexdigest(File.read(f))
+
+p = Db[:rc50].unarchived_paths(/0529/)[0]
+require 'digest/sha1'
+@f_shas = {}
+p.entries.each do |e|
+  Dir.chdir(p.path) do
+	  if Db.is_loopoff_file?(e)
+	    debugger
+	    @f_shas[e] = Digest::SHA1.hexdigest(File.read(e))
+	  end
+	end
+end
+
+# >> p = Db[:rc50].unarchived_paths(/0529/)[0]
+# => #<UnarchivedPath:/Users/goggins/Music/loopoff/rc50/export/for_logan_and_serg/20090529>
+# >> require 'digest/sha1'
+# => []
+# >> @f_shas = {}
+# => {}
+# >> p.entries.each do |e|
+# ?>   Dir.chdir(p.path) do
+# ?>   if Db.is_loopoff_file?(e)
+
+# >>     @f_shas[e] = Digest::SHA1.hexdigest(File.read(e))
+# >>   end
+# >> end
+# >> end
+# => [".", "..", ".git", "010_1.WAV", "010_2.WAV", "010_3.WAV", "013_1.WAV", "013_2.WAV", "013_3.WAV", "015_1.WAV", "015_2.WAV", "015_3.WAV", "019_1.WAV", "019_2.WAV", "019_3.WAV", "085_1.WAV", "085_2.WAV", "085_3.WAV", "README"]
+# >> @f_shas
+# => {"010_1.WAV"=>"651b505d6e4d9cf64b11306c8e232e49205a1be4", "010_3.WAV"=>"cf7b6b2a9e0920735bb2552b18c2577a1ab73a80", "085_3.WAV"=>"69a5b26fb954ca0e7b17ad97a775d8e1a0a6748d", "013_1.WAV"=>"90bfb3872bec56a98fb7ad2437a5f00136c6a7a2", "019_3.WAV"=>"dbcdc8a79922d3ea780502b05254aa26c6b86726", "019_2.WAV"=>"9f329e1c3d58fb108fd7934d9cfbfd2eb867b93b", "010_2.WAV"=>"677bb48d3ab7be2530ce8ffe50b027862036a734", "015_2.WAV"=>"6ad4315dcee0b8d9c1e08887aa4e50b5a4cd0a49", "013_2.WAV"=>"73609dd14b25349ae870af48317248b011cdf0a1", "013_3.WAV"=>"4e5dd54c9ed92b4323efc1e7a3f87ba6b92ba472", "019_1.WAV"=>"bc522deafd2ff093cdbf0078e78d10a0d1546b2d", "015_3.WAV"=>"1c17d1ff2f2af67b2512efb02376d51cf922be10", "015_1.WAV"=>"fd49affc2833c8d8fdfb2e141616c134a8742cae", "085_1.WAV"=>"2e68a0f727e2887b2f8266d885deef4a29246214", "085_2.WAV"=>"657785b8ed8180581048b290ef74202aaf05009a"}
+# >> ^Z
