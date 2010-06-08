@@ -10,6 +10,8 @@ class UnarchivedPath < Dir
     self.path.gsub(@db.path + '/','')
   end
   alias_method :relative_path, :name
+  alias_method :to_param, :name
+  
   
   def to_param
     self.name
@@ -105,7 +107,7 @@ class UnarchivedPath < Dir
         #prefix, middle, extension = b.name.match(/(.+)_(.+)\.(.+)/).to_a[1..-1] 
       end 
     end
-    @table
+    return @table
   end
   
   def loopoff_files

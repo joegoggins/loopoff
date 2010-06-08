@@ -48,11 +48,11 @@ HERE WE GO!
 						<a class="icon row_load"><span>Load this unloaded Row</span></a>
 						<input type="checkbox" value="<%= r_index %>" />
 						<span class="row_title"><%= row.name %></span>
-						<%# <div class="row_progress">
+						<!-- <%# <div class="row_progress">
 							<div class="row_load_bar" style="width: 100%;">
 								<div class="row_play_bar" style="width: 0%;"></div>
 							</div>
-						</div>											 -%>
+						</div>											 -%> -->
 						<span class="row_misc"></span>
 					</span>
 					<span class="f_right">
@@ -66,17 +66,19 @@ HERE WE GO!
 				[0,1].fill(nil,2,5)[0..2]
 				HACK this guarantees each row has exactly 3 elements
 				%>
-				<%- row.cells.fill(nil,2,20)[0..2].each do |cell| -%>
+				<%- max_min_cells = row.cells.dup
+				    max_min_cells.fill(nil,2,20)[0..2]
+				    row.cells.each do |cell| -%>
 				  <%- if cell.nil? -%>
 				    <td style="opacity: 0.3; font-size: .65em">n/a</td>
-				  <%- else -%>
-				    <td class="audio_cell" id="c<%= "#{cell.x}_#{cell.y}" %>" rel="<%= exportable_cell_path(@unarchived_path,cell.x, cell.y) %>">
+				  <%- else -%>				  
+				    <td class="audio_cell" id="c<%= "#{cell.x}_#{cell.y}" %>" rel="<%# CONTINUE HERE db_unarchived_path_cell_path(@db,@unarchived_path,cell) %>">
 							<span class="f_left cell_title"></span>
 							<span class="cell_misc"></span>
 							<span class="f_right">
 								  <a id="toggle_mute" href='#'>T</a>
 								 <!-- <a class="icon sound_mute"><span>Un mute this loop</span></a> -->
-								  <a class="icon download_file" href="<%= exportable_cell_path(@unarchived_path,cell.x,cell.y)  %>">
+								  <a class="icon download_file" href="#">
 									  <span>Download this file</span>
 									</a>
 							</span>
@@ -97,6 +99,6 @@ HERE WE GO!
 		</tbody>
   </table>
 </div><%# opened in _show_header class="loopoff_table_container" id="loopoff_table_1" %>
-<a href="#" class="export_selected" rel="<%= export_selected_rows_directory_path(@unarchived_path) %>">Export selected</a>
-<%= link_to 'Edit', edit_directory_path(@unarchived_path) %> |
-<%= link_to 'Back', directories_path %>
+<a href="#" class="export_selected" rel="<%# export_selected_rows_directory_path(@unarchived_path) %>">Export selected</a>
+<%# link_to 'Edit', edit_directory_path(@unarchived_path) %> |
+<%# link_to 'Back', directories_path %>
