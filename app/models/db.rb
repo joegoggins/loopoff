@@ -28,9 +28,10 @@ class Db < Dir
     end
   end
   
-  def self.is_loopoff_file?(full_path_to_file)
+  # If you want this to work with rel paths, wrap in Dir.chdir('the_dir') {}
+  def self.is_loopoff_file?(path_to_file)
     # TODO: add x.match(/README/) when ready
-    (x.match(/.WAV/i)) && File.file?(x)
+    (path_to_file.match(/.WAV/i)) && File.file?(path_to_file)
   end
   
   def name

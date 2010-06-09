@@ -1,4 +1,5 @@
-DIFFERENT SHAS with Digest::SHA1 use Grit::GitRuby::Internal::LooseStorage.calculate_sha(File.read(f),'blob') instead
+DIFFERENT SHAS with Digest::SHA1 use 
+Grit::GitRuby::Internal::LooseStorage.calculate_sha(File.read(f),'blob') instead
 
 f='/Users/goggins/Projects/personal/loopoff/loop_db/rc50/20090529/010_1.WAV'
 puts Digest::SHA1.hexdigest(File.read(f))

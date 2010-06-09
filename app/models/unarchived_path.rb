@@ -1,9 +1,26 @@
 class UnarchivedPath < Dir
-  attr_reader :db, :repo
+  class MyFile
+    attr_accessor :name, :size, :sha
+    def initialize(hash={})
+      hash.each_pair do |k,v|
+        self.send("#{k}=",v)
+      end
+    end
+  end
+  
+  attr_reader :db, :repo, :my_files
 
   def initialize(db, absolute_path)
     @db = db
     super(absolute_path)
+    @my_files = []
+    self.loopoff_files.each do |f|
+      @my_files << MyFile.new(:name => f,
+        :size => File.size(f),
+        :sha => Grit::GitRuby::Internal::LooseStorage.calculate_sha(File.read(f),'blob')
+      )
+    end
+    
   end
   
   def name
@@ -17,49 +34,92 @@ class UnarchivedPath < Dir
     self.name
   end
   
-  def new_blob_ids
-    self.distinct_blob_ids - self.db.repo.distinct_blobs.map(&:id)
-  end
-
-  def new_blobs
-    self.repo.tree.blobs.select {|x| self.new_blob_ids.include?(x.id)}
-  end
-  
-  def identical_blobs
-    self.repo.tree.blobs.select {|x| self.idential_blob_ids.include?(x.id)}
-  end
-  
-  def idential_blob_ids
-    self.distinct_blob_ids & self.db.repo.distinct_blobs.map(&:id)
-  end
-  
-  # Requires you to manually create the repo for now, Grit and Gash
-  # were being dumb, raises
-  #   Grit::InvalidGitRepositoryError => e
   def repo
     @repo ||= Grit::Repo.new(self.path)
   end
   
-  # WARNING DUPLICATION: from repo.rb
-  def distinct_blobs
-    if @distinct_blobs.blank?
-      distinct_blob_ids = []
-      @distinct_blobs = []
-      self.repo.commits.each do |c|
-        c.tree.blobs.each do |b|
-          unless distinct_blob_ids.include?(b.id)            
-            @distinct_blobs << b
-            distinct_blob_ids << b.id
-          end
-        end
-      end      
+  # def inject_file_ids
+  #   self.entries.each do |entry|
+  #     entry.instance_eval(<<-EOS,__FILE__,__LINE__)
+  #       def sha
+  #         "#{self.file_ids[entry]}"
+  #       end
+  #     EOS
+  #   end
+  #   debugger
+  # end
+  # THIS WORKS: 2010-08-09
+  # p = Db[:rc50].unarchived_paths(/07/)[0]
+  # p.file_ids_hash
+  # "006_1.WAV"=>"810c66e795db7a9cbfea9735f11336629ab6db30", "011_3.WAV"=>"f668d505e9500fb580d9ef89e3db094d9984b683", "030_1.WAV"=>"9749e0bac6b3ca57faab1848475906e99ee3b699"}
+  def file_ids_hash
+    if @file_ids.blank?
+      @file_ids = {}
+      self.loopoff_files.each do |f|
+        @file_ids[File.basename(f)] = Grit::GitRuby::Internal::LooseStorage.calculate_sha(File.read(f),'blob')
+      end        
     end
-    @distinct_blobs
+    @file_ids
   end
   
-  def distinct_blob_ids
-    self.distinct_blobs.map(&:id)
+  def new_file_ids
+    @new_file_ids ||= self.file_ids.values - self.db.repo.distinct_blobs.map(&:id)
   end
+  
+  def new_files
+
+  end
+  # def new_blob_ids
+  #   self.distinct_blob_ids - self.db.repo.distinct_blobs.map(&:id)
+  # end
+  # 
+  # # FIX: p = Db[:rc50].unarchived_paths(/0529/)[0]
+  # # p.distinct_blobs
+  # # => ["76c62a5d3ef0e37802c3632a15219e580eab405b", "4ce831386425818744af9864778ec0c37d339555", "8c9906cec4557bb7cb90a65ade29a9e0bf6fddea", "1610294c33bd526fb236d9917bb57c74d7207f2c", "1175d36089d079fd49c18c808e3d138d387cba4a", "5681bc6e4081add10cb817b06e062586ffe54a4a", "8bc91277112d56eb6874caf3081387ad2e647fd5", "73d90ed25e75c123f50e4a272a4b2d3c87773347", "a5fe15a204c59c4a2f46f5c1c614a64f2a980e9c", "1e45a3b2bfb8c43d80cd656781d920cae74e8bc2", "56443ed770a6f480f9ffd157036deda5ec6b9306", "8417d133f1a2b12f4df345c8f007188c1c0104ca", "1d29f62712c2ba72702c497d12c2e574e68a7ee3", "feaeb9c3aad896a74be472118c5a1c6d6ad5e436", "56ceabd8d37a79b1f72acb013058508a662cdc0a"]
+  # def new_blobs
+  #   #self.repo.tree.blobs.select {|x| self.new_blob_ids.include?(x.id)}
+  #   #Grit::GitRuby::Internal::LooseStorage.calculate_sha(File.read(f),'blob') instead
+  # end
+  # 
+  # def identical_blobs
+  #   self.repo.tree.blobs.select {|x| self.idential_blob_ids.include?(x.id)}
+  # end
+  # 
+  # def idential_blob_ids
+  #   self.distinct_blob_ids & self.db.repo.distinct_blobs.map(&:id)
+  # end
+  
+  # Requires you to manually create the repo for now, Grit and Gash
+  # were being dumb, raises
+  #   Grit::InvalidGitRepositoryError => e
+  
+  # # WARNING DUPLICATION: from repo.rb
+  # def distinct_blobs
+  #   if @distinct_blobs.blank?
+  #     @distinct_blobs = []
+  #     self.loopoff_files.each do |f|
+  #       @distinct_blobs << Grit::GitRuby::Internal::LooseStorage.calculate_sha(File.read(f),'blob')
+  #     end
+  #   end
+  #   @distinct_blobs
+  #   # if @distinct_blobs.blank?
+  #   #   distinct_blob_ids = []
+  #   #   @distinct_blobs = []
+  #   #   self.repo.commits.each do |c|
+  #   #     c.tree.blobs.each do |b|
+  #   #       unless distinct_blob_ids.include?(b.id)            
+  #   #         @distinct_blobs << b
+  #   #         distinct_blob_ids << b.id
+  #   #       end
+  #   #     end
+  #   #   end      
+  #   # end
+  #   # @distinct_blobs
+  # end
+  # 
+  # def distinct_blob_ids
+  #   self.distinct_blobs.map(&:id)
+  # end
   
   
   def table
