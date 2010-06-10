@@ -37,6 +37,9 @@ class UnarchivedPath < Dir
     self.my_files.count {|x| x.is_identical}
   end
   
+  # TODO number_of_new_files
+  # number_of_new_rows
+  
   def my_files
     if @my_files.blank?
       @my_files = []

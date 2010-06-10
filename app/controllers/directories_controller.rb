@@ -14,6 +14,39 @@ class DirectoriesController < ApplicationController
     end
     
   end
+  
+  
+  def v2_export_selected_rows
+    @db = Db[:rc50]
+    @unarchived_path = @db.unarchived_paths(params[:id])
+    @rows = params[:rows]
+    @export_dir = Directory.find(params[:export_dir])
+
+    raise "must be array" unless @rows.kind_of? Array
+    @rows.map! {|x| x.to_i}
+    @the_file_paths = []
+    @unarchived_path.my_aggregated_files.each_with_index do |agg_tuple,row_index|
+      next unless @rows.include?(row_index)
+    	agg_tuple.last.each_with_index do |my_file,col_index|
+    	  if @unarchived_path.cell(row_index,col_index).nil?
+        else
+          @the_file_paths << @unarchived_path.cell(row_index,col_index).name
+        end			  
+     end
+    end
+    debugger
+    if !File.directory?(@export_dir.path)
+     begin
+       FileUtils.rm_rf @export_dir.path
+     rescue
+     end
+     FileUtils.mkdir(@export_dir.path)
+    end
+    FileUtils.cp_r(@the_file_paths,@export_dir.path)
+    respond_to do |format|
+     format.json { render :json =>{:status => :success,:files => @the_file_paths,:export_path => @export_dir.path}} 
+    end
+  end
   def load_all_directories
     @directories = Directory.all.sort_by(&:slug)
   end

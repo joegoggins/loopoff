@@ -43,7 +43,8 @@ ActionController::Routing::Routes.draw do |map|
       :v2 => :get,
       :export_page_of => :get,
       :process_export_page_of => :post,
-      :export_selected_rows => :get
+      :export_selected_rows => :get,
+      :v2_export_selected_rows => :get
       
       } do |directory|
     directory.resources :cells, :only => :show # serves the .wav files up

@@ -4,27 +4,12 @@
 	<%= pluralize(@unarchived_path.number_of_files, 'file') %><br />
 	<%= pluralize(@unarchived_path.number_of_identicals, 'identical') %>
 </p>
-<div class="f_left">
-  INPUT:<%# select_tag "input_dir", options_for_select(@directories.map {|x| [x.slug,directory_url(x)]},directory_url(@directory)) %>
-</div>
-<a href="#" class="export_selected" rel="<%# export_selected_rows_directory_path(@directory) %>">Export selected</a>
+<a href="#" class="export_selected" rel="<%= v2_export_selected_rows_directory_path(@unarchived_path) %>">Export selected</a>
 <div class="f_right">
-	<%#- the_export_options = [["Please select",nil]] + @directories.map {|x| [x.slug,x.id]} -%>
-  OUTPUT:<%#= select_tag "export_dir", options_for_select(the_export_options) %>
+	<%- the_export_options = [["Please select",nil]] + @directories.map {|x| [x.slug,x.id]} -%>
+  OUTPUT:<%= select_tag "export_dir", options_for_select(the_export_options) %>
 </div>
 
-<%#- unless @export_mode -%>
-	<%#= link_to "Export Page", export_page_of_directory_path(@directory) %>
-	<p>
-	  <b>Slug:</b>
-	  <%#=h @directory.slug %>
-	</p>
-	<p>
-	  <b>Path:</b>
-	  <%#=h @directory.path %>
-	</p>
-<%#- end -%>
-<%#  OPENNING CONTAINER CLOSED IN _footer -%>
 <div class="loopoff_table_container" id="loopoff_container_1">
 	<h2>"bender 1" RC-50 snapshot</h2>
 	<div class="f_right">
