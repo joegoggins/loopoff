@@ -1,0 +1,114 @@
+<div class="f_left">
+  INPUT:<%# select_tag "input_dir", options_for_select(@directories.map {|x| [x.slug,directory_url(x)]},directory_url(@directory)) %>
+</div>
+<a href="#" class="export_selected" rel="<%# export_selected_rows_directory_path(@directory) %>">Export selected</a>
+<div class="f_right">
+	<%#- the_export_options = [["Please select",nil]] + @directories.map {|x| [x.slug,x.id]} -%>
+  OUTPUT:<%#= select_tag "export_dir", options_for_select(the_export_options) %>
+</div>
+
+<%#- unless @export_mode -%>
+	<%#= link_to "Export Page", export_page_of_directory_path(@directory) %>
+	<p>
+	  <b>Slug:</b>
+	  <%#=h @directory.slug %>
+	</p>
+	<p>
+	  <b>Path:</b>
+	  <%#=h @directory.path %>
+	</p>
+<%#- end -%>
+<%#  OPENNING CONTAINER CLOSED IN _footer -%>
+<div class="loopoff_table_container" id="loopoff_container_1">
+	<h2>"bender 1" RC-50 snapshot</h2>
+	<div class="f_right">
+			<span class="time_ago">taken 3 weeks ago May 7th</span>
+			<a class="icon playlist_info"><span>Playlist Info</span></a>
+			<div class="jqmWindow" id="playlist_info_content">
+				<a href="#" class="jqmClose">Close</a>
+				<hr />
+				THE CONTENT GOES HERE
+			</div>
+	</div>
+	<table>
+		<thead>
+		<%#- unless @export_mode -%>
+		<tr class="tbl_chng">
+			<th>
+				<a class="icon playlist_oldest" href="http://google.com"><span>Oldest</span></a>
+				<a class="icon playlist_previous" href="http://google.com"><span>Previous</span></a>
+			</th>
+			<th></th>
+		  <th></th>
+			<th></th>
+			<th class="f_right">
+				<a class="icon playlist_next" href="http://google.com"><span>Next</span></a>
+				<a class="icon playlist_newest" href="http://google.com"><span>Newest</span></a>				
+			</th>
+		</tr>
+		<%#- end -%>
+		<tr>
+			<th>Loop Sets</th>
+			<th>1</th>
+			<th>2</th>
+			<th>3</th>
+			<th><span class="f_right">Song Info</span></th>
+		</tr>
+		</thead>
+		<tbody>		
+			<%- @unarchived_path.aggregated_files.each_with_index do |agg_tuple,row_index| -%>
+			<tr class="<%= cycle('','alt') %>">
+				<td class="controller_cell">
+					<a name="r<%= row_index %>"></a>
+					<span class="f_left">
+						<a class="icon row_load"><span>Load this unloaded Row</span></a>
+						<input type="checkbox" value="<%= row_index %>" />
+						<span class="row_title"><%= @export_mode ? "#{row_index}_*.wav" : agg_tuple.first %></span>
+						<%# <div class="row_progress">
+							<div class="row_load_bar" style="width: 100%;">
+								<div class="row_play_bar" style="width: 0%;"></div>
+							</div>
+						</div>											 -%>
+						<span class="row_misc"></span>
+					</span>
+					<span class="f_right">
+						<a class="icon row_stop"><span>Stop Row and Restore head to 0</span></a>
+						<a class="icon row_pause"><span>Pause Row</span></a>
+						<a class="icon row_play"><span>Play Row</span></a>
+						<a class="icon row_play_looped"><span>Play Row Looped</span></a>
+					</span>				
+				</td>
+				<%- agg_tuple.last.each_with_index do |base_file_name,col_index| -%>
+				  <%- if @unarchived_path.cell(row_index,col_index).nil? -%>
+				    <td style="opacity: 0.3; font-size: .65em">n/a</td>
+				  <%- else -%>
+				    <td class="audio_cell" id="c<%= "#{row_index}_#{col_index}" %>" rel="<%= exportable_cell_path(@unarchived_path,row_index, col_index) %>">
+							<span class="f_left cell_title"></span>
+							<span class="cell_misc"></span>
+							<span class="f_right">
+								  <a id="toggle_mute" href='#'>T</a>
+								 <!-- <a class="icon sound_mute"><span>Un mute this loop</span></a> -->
+								  <a class="icon download_file" href="<%= exportable_cell_path(@unarchived_path,row_index,col_index)  %>">
+									  <span>Download this file</span>
+									</a>
+							</span>
+					  </td>
+					<%- end -%>
+
+				<%- end -%>
+				<td>
+					<span class="f_left cell_title"></span>
+					<span class="cell_misc"></span>
+					<span class="f_right">
+						<%#  <a class="icon heart"><span>I love this loop</span></a>
+						<a class="icon pencil"><span>Edit the notes and meta data about loop</span></a> -%>
+					</span>
+				</td>
+			</tr>			
+			<%- end -%>
+		</tbody>
+		    </table>
+			</div><%# opened in _show_header class="loopoff_table_container" id="loopoff_table_1" %>
+			<a href="#" class="export_selected" rel="<%= export_selected_rows_directory_path(@unarchived_path) %>">Export selected</a>
+		<%= link_to 'Edit', edit_directory_path(@unarchived_path) %> |
+		<%= link_to 'Back', directories_path %>

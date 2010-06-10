@@ -4,8 +4,7 @@ class DirectoriesController < ApplicationController
   before_filter :load_all_directories
   
   def v2
-    @directory = Db[:rc50].unarchived_paths(params[:id])
-    debugger
+    @unarchived_path = Db[:rc50].unarchived_paths(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

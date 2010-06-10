@@ -28,6 +28,35 @@ class UnarchivedPath < Dir
     @my_files    
   end
   
+  def aggregated_files
+    if @aggregated_files
+      @aggregated_files
+    else
+      # yields elements like ["007", ["007_2.WAV", "007_3.WAV"]]
+      @aggregated_files = self.loopoff_files.map {|x| File.basename(x)}.group_by {|x| x.split('_').first}.sort
+      
+      # insert nils to make matrix solid, like ["007", [nil, "007_2.WAV", "007_3.WAV"]]
+      @aggregated_files.map do |x| 
+        if x.last.length != 3
+          modded_3_tuple = [nil,nil,nil]
+          x.last.each_with_index do |val,index|
+            f_number = val.split('_').last.gsub(/\.WAV/,'').to_i # the 2 or 3 part minus the .WAV
+            modded_3_tuple[f_number-1] = val            
+          end
+          x[1]=modded_3_tuple
+          x
+        else 
+          x
+        end
+      end      
+    end
+  end
+  
+  # returns the file name on
+  def cell(x,y)
+    self.aggregated_files[x.to_i][1][y.to_i]
+  end
+  
   def name
     self.path.gsub(@db.path + '/','')
   end
