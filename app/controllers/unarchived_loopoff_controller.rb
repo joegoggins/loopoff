@@ -25,14 +25,9 @@ class UnarchivedLoopoffController < Loader::DbController
         end			  
      end
     end
-    # if unspecified make an export dir    
-    if params[:export_dir].blank?
-      actual_export_dir = "exp_#{params[:id]}"
-    else
-      actual_export_dir = params[:export_dir]
-    end
-    
-    export_dir = File.join(@db.path,actual_export_dir)
+
+    # SECURITY: UNSANITIZED params[:export_dir]    
+    export_dir = File.join(@db.path,params[:export_dir].blank? ? @unarchived_path.export_path : params[:export_dir])
     if !File.directory?(export_dir)
       if File.exists?(export_dir)
         render :status => 500, :text => "INVALID export dir #{export_dir}, a non-directory exists there"

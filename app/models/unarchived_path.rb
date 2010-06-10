@@ -107,9 +107,17 @@ class UnarchivedPath < Dir
   alias_method :relative_path, :name
   alias_method :to_param, :name
   
+  # the default for export overridable in controller
+  def export_path
+    "exp_#{self.basename.gsub(/[^A-Za-z0-9_]/,'_')}"
+  end
   
   def to_param
     self.name
+  end
+  
+  def basename
+    File.basename(self.path)
   end
   
   def repo

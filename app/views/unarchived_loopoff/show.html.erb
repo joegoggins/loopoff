@@ -48,7 +48,7 @@
 					<a name="r<%= row_index %>"></a>
 					<span class="f_left">
 						<a class="icon row_load"><span>Load this unloaded Row</span></a>																	
-						<input type="checkbox" value="<%= row_index %>" />
+						<input name="do_export" type="checkbox" value="<%= row_index %>" />
 						<span class="row_title"><%= @export_mode ? "#{row_index}_*.wav" : agg_tuple.first %></span>
 						<a href="javascript:void(0)" class="export_selected" rel="<%=
 						  export_selected_rows_db_unarchived_path_loopoff_path(@db,@unarchived_path) %>">x</a>
