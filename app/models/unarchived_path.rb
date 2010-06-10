@@ -11,6 +11,7 @@ class UnarchivedPath < Dir
     def basename
       File.basename(self.name)
     end
+    alias_method :to_param, :basename
   end
   
   
@@ -34,18 +35,23 @@ class UnarchivedPath < Dir
     @my_files    
   end
   
-  def aggregated_files
-    if @aggregated_files
-      @aggregated_files
+
+  def my_aggregated_files
+    self.my_aggregated_file_hash.to_a
+  end
+  
+  def my_aggregated_file_hash
+    if @my_aggregated_file_hash
+      @my_aggregated_file_hash
     else
       # yields elements like ["007", ["007_2.WAV", "007_3.WAV"]]
-      @aggregated_files = self.my_files.group_by do |my_file|
+      @my_aggregated_file_hash = self.my_files.group_by do |my_file|
         my_file.basename.split('_').first
       end
          #{|x| File.basename(x.name)}.group_by {|x| x.split('_').first}.sort
       
       # insert nils to make matrix solid, like ["007", [nil, "007_2.WAV", "007_3.WAV"]]
-      @aggregated_files.map do |x| 
+      @my_aggregated_file_hash.map do |x| 
         if x.last.length != 3
           modded_3_tuple = [nil,nil,nil]
           x.last.each_with_index do |my_file,index|
@@ -73,7 +79,7 @@ class UnarchivedPath < Dir
   
   # returns the file name on
   def cell(x,y)
-    self.aggregated_files[x.to_i][1][y.to_i]
+    self.my_aggregated_files[x.to_i][1][y.to_i]
   end
   
   def name

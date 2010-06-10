@@ -4,8 +4,10 @@ class DirectoriesController < ApplicationController
   before_filter :load_all_directories
   
   def v2
-    @unarchived_path = Db[:rc50].unarchived_paths(params[:id])
-
+    @db = Db[:rc50]
+    @unarchived_path = @db.unarchived_paths(params[:id])
+    @my_aggregated_files = @unarchived_path.my_aggregated_files
+#    debugger
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @directory }

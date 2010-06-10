@@ -56,7 +56,7 @@
 		</tr>
 		</thead>
 		<tbody>		
-			<%- @unarchived_path.aggregated_files.each_with_index do |agg_tuple,row_index| -%>
+			<%- @unarchived_path.my_aggregated_files.each_with_index do |agg_tuple,row_index| -%>
 			<tr class="<%= cycle('','alt') %>">
 				<td class="controller_cell">
 					<a name="r<%= row_index %>"></a>
@@ -82,13 +82,13 @@
 				  <%- if @unarchived_path.cell(row_index,col_index).nil? -%>
 				    <td style="opacity: 0.3; font-size: .65em">n/a</td>
 				  <%- else -%>
-				    <td class="audio_cell" id="c<%= "#{row_index}_#{col_index}" %>" rel="<%= exportable_cell_path(@unarchived_path,row_index, col_index) %>">
+				    <td class="audio_cell" id="c<%= "#{row_index}_#{col_index}" %>" rel="<%# db_unarchived_path_cell_path(@db,@unarchived_path, @unarchived_path.cell(row_index,col_index)) %>">
 							<span class="f_left cell_title"></span>
 							<span class="cell_misc"></span>
 							<span class="f_right">
 								  <a id="toggle_mute" href='#'>T</a>
 								 <!-- <a class="icon sound_mute"><span>Un mute this loop</span></a> -->
-								  <a class="icon download_file" href="<%= exportable_cell_path(@unarchived_path,row_index,col_index)  %>">
+								  <a class="icon download_file" href="<%#  %>">
 									  <span>Download this file</span>
 									</a>
 							</span>
@@ -109,6 +109,6 @@
 		</tbody>
 		    </table>
 			</div><%# opened in _show_header class="loopoff_table_container" id="loopoff_table_1" %>
-			<a href="#" class="export_selected" rel="<%= export_selected_rows_directory_path(@unarchived_path) %>">Export selected</a>
-		<%= link_to 'Edit', edit_directory_path(@unarchived_path) %> |
-		<%= link_to 'Back', directories_path %>
+			<a href="#" class="export_selected" rel="<%# export_selected_rows_directory_path(@unarchived_path) %>">Export selected</a>
+		<%# link_to 'Edit', edit_directory_path(@unarchived_path) %> |
+		<%# link_to 'Back', directories_path %>
