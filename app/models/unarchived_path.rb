@@ -1,4 +1,5 @@
 class UnarchivedPath < Dir
+  # INNER HELPER CLASS
   class MyFile
     attr_accessor :name, :size, :sha
     def initialize(hash={})
@@ -6,10 +7,15 @@ class UnarchivedPath < Dir
         self.send("#{k}=",v)
       end
     end
+    
+    def basename
+      File.basename(self.name)
+    end
   end
   
+  
+  
   attr_reader :db, :repo, :my_files
-
   def initialize(db, absolute_path)
     @db = db
     super(absolute_path)    
@@ -33,23 +39,36 @@ class UnarchivedPath < Dir
       @aggregated_files
     else
       # yields elements like ["007", ["007_2.WAV", "007_3.WAV"]]
-      @aggregated_files = self.loopoff_files.map {|x| File.basename(x)}.group_by {|x| x.split('_').first}.sort
+      @aggregated_files = self.my_files.group_by do |my_file|
+        my_file.basename.split('_').first
+      end
+         #{|x| File.basename(x.name)}.group_by {|x| x.split('_').first}.sort
       
       # insert nils to make matrix solid, like ["007", [nil, "007_2.WAV", "007_3.WAV"]]
       @aggregated_files.map do |x| 
         if x.last.length != 3
           modded_3_tuple = [nil,nil,nil]
-          x.last.each_with_index do |val,index|
-            f_number = val.split('_').last.gsub(/\.WAV/,'').to_i # the 2 or 3 part minus the .WAV
-            modded_3_tuple[f_number-1] = val            
+          x.last.each_with_index do |my_file,index|
+            f_number = my_file.basename.split('_').last.gsub(/\.WAV/,'').to_i # the 2 or 3 part minus the .WAV
+            modded_3_tuple[f_number-1] = my_file            
           end
           x[1]=modded_3_tuple
           x
         else 
           x
         end
-      end      
+      end
     end
+  end
+  
+  def my_file_hash
+    if @my_file_hash.blank?
+      @my_file_hash = {}
+      self.my_files.each do |f|
+        @my_file_hash[File.basename(f.name)] = f
+      end
+    end
+    @my_file_hash
   end
   
   # returns the file name on
@@ -72,17 +91,6 @@ class UnarchivedPath < Dir
     @repo ||= Grit::Repo.new(self.path)
   end
   
-  # def inject_file_ids
-  #   self.entries.each do |entry|
-  #     entry.instance_eval(<<-EOS,__FILE__,__LINE__)
-  #       def sha
-  #         "#{self.file_ids[entry]}"
-  #       end
-  #     EOS
-  #   end
-  #   debugger
-  # end
-  # THIS WORKS: 2010-08-09
   # p = Db[:rc50].unarchived_paths(/07/)[0]
   # p.file_ids_hash
   # "006_1.WAV"=>"810c66e795db7a9cbfea9735f11336629ab6db30", "011_3.WAV"=>"f668d505e9500fb580d9ef89e3db094d9984b683", "030_1.WAV"=>"9749e0bac6b3ca57faab1848475906e99ee3b699"}
@@ -106,13 +114,9 @@ class UnarchivedPath < Dir
     end
     @file_ids_hash
   end
-  
-  def new_file_ids
-    @new_file_ids ||= self.file_ids.values - self.db.repo.distinct_blobs.map(&:id)
-  end
-  
-  def new_files
-
+    
+  def my_new_files
+    self.my_files.select {|x| self.db.repo.distinct_blobs.map(&:id).include?(x.sha)}
   end
   # def new_blob_ids
   #   self.distinct_blob_ids - self.db.repo.distinct_blobs.map(&:id)
