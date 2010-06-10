@@ -53,6 +53,10 @@ class UnarchivedPath < Dir
     end
     @my_files    
   end
+
+  def my_new_files
+    self.my_files.select {|x| x.is_identical}
+  end
   
 
   def my_aggregated_files
@@ -148,9 +152,6 @@ class UnarchivedPath < Dir
     @file_ids_hash
   end
     
-  def my_new_files
-    self.my_files.select {|x| self.db.repo.distinct_blobs.map(&:id).include?(x.sha)}
-  end
   # def new_blob_ids
   #   self.distinct_blob_ids - self.db.repo.distinct_blobs.map(&:id)
   # end
