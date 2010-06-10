@@ -1,6 +1,8 @@
 <h2>Unarchived Dir</h2>
-<p>
-	<%= pluralize(@unarchived_path.my_aggregated_files.length,'row') %> aggregated by prefix
+<p><%=  %>
+	<%= pluralize(@unarchived_path.number_of_rows, 'row') %><br />
+	<%= pluralize(@unarchived_path.number_of_files, 'file') %><br />
+	<%= pluralize(@unarchived_path.number_of_identicals, 'identical') %>
 </p>
 <div class="f_left">
   INPUT:<%# select_tag "input_dir", options_for_select(@directories.map {|x| [x.slug,directory_url(x)]},directory_url(@directory)) %>

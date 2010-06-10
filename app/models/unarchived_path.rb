@@ -25,6 +25,18 @@ class UnarchivedPath < Dir
     super(absolute_path)    
   end
   
+  def number_of_rows
+    self.my_aggregated_file_hash.keys.length
+  end
+  
+  def number_of_files
+    self.my_files.length
+  end
+  
+  def number_of_identicals
+    self.my_files.count {|x| x.is_identical}
+  end
+  
   def my_files
     if @my_files.blank?
       @my_files = []
