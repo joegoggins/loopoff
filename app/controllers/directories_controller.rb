@@ -2,6 +2,17 @@ require 'fileutils'
 require 'ostruct'
 class DirectoriesController < ApplicationController
   before_filter :load_all_directories
+  
+  def v2
+    @directory = Db[:rc50].unarchived_paths(params[:id])
+    debugger
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @directory }
+    end
+    
+  end
   def load_all_directories
     @directories = Directory.all.sort_by(&:slug)
   end

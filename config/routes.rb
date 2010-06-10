@@ -40,6 +40,7 @@ ActionController::Routing::Routes.draw do |map|
     
   map.resources :directories, 
     :member => {
+      :v2 => :get,
       :export_page_of => :get,
       :process_export_page_of => :post,
       :export_selected_rows => :get

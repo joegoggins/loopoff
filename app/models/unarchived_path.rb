@@ -12,15 +12,21 @@ class UnarchivedPath < Dir
 
   def initialize(db, absolute_path)
     @db = db
-    super(absolute_path)
-    @my_files = []
-    self.loopoff_files.each do |f|
-      @my_files << MyFile.new(:name => f,
-        :size => File.size(f),
-        :sha => Grit::GitRuby::Internal::LooseStorage.calculate_sha(File.read(f),'blob')
-      )
-    end
-    
+    super(absolute_path)    
+  end
+  
+  def my_files
+    # if @my_files.blank?
+    #     self.loopoff_files.each do |f|
+    #       @my_files << MyFile.new(:name => f,
+    #         :size => File.size(f),
+    #         :sha => Grit::GitRuby::Internal::LooseStorage.calculate_sha(File.read(f),'blob')
+    #       )
+    #     end        
+    #     puts "WILL BUILD FILE"
+    #   end
+    # end
+    @my_files    
   end
   
   def name
@@ -53,13 +59,24 @@ class UnarchivedPath < Dir
   # p.file_ids_hash
   # "006_1.WAV"=>"810c66e795db7a9cbfea9735f11336629ab6db30", "011_3.WAV"=>"f668d505e9500fb580d9ef89e3db094d9984b683", "030_1.WAV"=>"9749e0bac6b3ca57faab1848475906e99ee3b699"}
   def file_ids_hash
-    if @file_ids.blank?
-      @file_ids = {}
-      self.loopoff_files.each do |f|
-        @file_ids[File.basename(f)] = Grit::GitRuby::Internal::LooseStorage.calculate_sha(File.read(f),'blob')
-      end        
+    if @file_ids_hash.blank?
+      # load the file sha's from cache if possible
+      cache_file = File.join(self.path,'.loopoff')
+      if File.exists?(cache_file)
+         @file_ids_hash = YAML.load(File.read(cache_file))
+      else
+        # build it
+        @file_ids_hash = {}
+        self.loopoff_files.each do |f|
+          @file_ids_hash[File.basename(f)] = Grit::GitRuby::Internal::LooseStorage.calculate_sha(File.read(f),'blob')
+        end
+        # write the cache
+        File.open(cache_file,'w') do |f|
+          f.puts YAML.dump(@file_ids_hash)          
+        end
+      end           
     end
-    @file_ids
+    @file_ids_hash
   end
   
   def new_file_ids
