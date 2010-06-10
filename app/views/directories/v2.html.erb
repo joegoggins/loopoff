@@ -82,7 +82,7 @@
 				  <%- if @unarchived_path.cell(row_index,col_index).nil? -%>
 				    <td style="opacity: 0.3; font-size: .65em">n/a</td>
 				  <%- else -%>
-				    <td class="audio_cell" id="c<%= "#{row_index}_#{col_index}" %>" rel="<%# db_unarchived_path_cell_path(@db,@unarchived_path, @unarchived_path.cell(row_index,col_index)) %>">
+				    <td class="audio_cell" id="c<%= "#{row_index}_#{col_index}" %>" rel="<%= db_unarchived_path_cell_path(@db,@unarchived_path,"#{row_index},#{col_index}") %>">
 							<span class="f_left cell_title"></span>
 							<span class="cell_misc"></span>
 							<span class="f_right">

@@ -12,6 +12,11 @@ class UnarchivedPath < Dir
       File.basename(self.name)
     end
     alias_method :to_param, :basename
+    
+    
+    def data
+      File.read(self.name)
+    end
   end
   
   
