@@ -20,7 +20,7 @@ class DirectoriesController < ApplicationController
     @db = Db[:rc50]
     @unarchived_path = @db.unarchived_paths(params[:id])
     @rows = params[:rows]
-    @export_dir = Directory.find(params[:export_dir])
+
 
     raise "must be array" unless @rows.kind_of? Array
     @rows.map! {|x| x.to_i}
@@ -34,17 +34,17 @@ class DirectoriesController < ApplicationController
         end			  
      end
     end
-    debugger
-    if !File.directory?(@export_dir.path)
-     begin
-       FileUtils.rm_rf @export_dir.path
-     rescue
-     end
-     FileUtils.mkdir(@export_dir.path)
+    export_dir = File.join(@db.path,params[:export_dir])
+    if !File.directory?(export_dir)
+      if File.exists?(export_dir)
+        render :status => 500, :text => "INVALID export dir #{export_dir}, a non-directory exists there"
+      else
+        FileUtils.mkdir(export_dir)
+      end     
     end
-    FileUtils.cp_r(@the_file_paths,@export_dir.path)
+    FileUtils.cp_r(@the_file_paths,export_dir)
     respond_to do |format|
-     format.json { render :json =>{:status => :success,:files => @the_file_paths,:export_path => @export_dir.path}} 
+      format.json { render :json =>{:status => :success,:files => @the_file_paths,:export_path => export_dir}} 
     end
   end
   def load_all_directories

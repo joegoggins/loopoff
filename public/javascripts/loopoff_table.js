@@ -129,9 +129,26 @@ $(document).ready(function() {
 		  }
 	  })
 	  console.info("sending request to copy files to server");
-	  var export_options ={"rows":rows_to_export,"export_dir":$('select#export_dir').val()};
+	  var export_dir = $.urlParam('export_dir');
+	  if(export_dir == "") {
+	    alert('ERROR: add this to url ?export_dir=X');
+	    return false;
+	  }
+	  if(rows_to_export.length == 0) {
+		  alert('ERROR: No rows selected');
+	    return false;
+	  }
+	  
+	  var export_options ={"rows":rows_to_export,"export_dir":export_dir};
 		$.getJSON($(evt.target).attr('rel'),export_options, function(json) {
 		  console.info(json);
+		  if(json != null && json.status == "success") {
+			$(evt.target).after(' Exported');			
+		  }
+		  else {
+			$(evt.target).after(' FAILURE');			
+		  }
+		  
 		});
   }
 
@@ -142,6 +159,18 @@ $(document).ready(function() {
 		  audio_inst.currentTime = 0;
 	  }
   }
+
+  // http://snipplr.com/view/11583/retrieve-url-params-with-jquery/
+	$.urlParam = function(name) {
+	  var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	  if(results == null) {
+		  return "";
+	  }
+	  else {
+		  return results[1];
+	  }
+	}
+
   ///////////////// HELPER FUNCTIONS END
 
 
