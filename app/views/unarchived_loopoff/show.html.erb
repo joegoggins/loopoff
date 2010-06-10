@@ -1,8 +1,10 @@
-<h1>UnarchivedLoopoff#show</h1>
-<p>Find me in app/views/unarchived_loopoff/show.html.erb</p>
-<%= link_to "cell 0,0", db_unarchived_path_cell_path('rc50','20090529','0,0') %>
+<h2>Unarchived Dir</h2>
+<p><%=  %>
+	<%= pluralize(@unarchived_path.number_of_rows, 'row') %><br />
+	<%= pluralize(@unarchived_path.number_of_files, 'file') %><br />
+	<%= pluralize(@unarchived_path.number_of_identicals, 'identical') %>
+</p>
 
-HERE WE GO!
 <div class="loopoff_table_container" id="loopoff_container_1">
 	<h2>"bender 1" RC-50 snapshot</h2>
 	<div class="f_right">
@@ -16,7 +18,7 @@ HERE WE GO!
 	</div>
 	<table>
 		<thead>
-		<%- unless @export_mode -%>
+		<%#- unless @export_mode -%>
 		<tr class="tbl_chng">
 			<th>
 				<a class="icon playlist_oldest" href="http://google.com"><span>Oldest</span></a>
@@ -30,7 +32,7 @@ HERE WE GO!
 				<a class="icon playlist_newest" href="http://google.com"><span>Newest</span></a>				
 			</th>
 		</tr>
-		<%- end -%>
+		<%#- end -%>
 		<tr>
 			<th>Loop Sets</th>
 			<th>1</th>
@@ -40,19 +42,21 @@ HERE WE GO!
 		</tr>
 		</thead>
 		<tbody>		
-			<%- @table.rows.each_with_index do |row,r_index| -%>
+			<%- @unarchived_path.my_aggregated_files.each_with_index do |agg_tuple,row_index| -%>
 			<tr class="<%= cycle('','alt') %>">
 				<td class="controller_cell">
-					<a name="r<%= r_index %>"></a>
+					<a name="r<%= row_index %>"></a>
 					<span class="f_left">
-						<a class="icon row_load"><span>Load this unloaded Row</span></a>
-						<input type="checkbox" value="<%= r_index %>" />
-						<span class="row_title"><%= row.name %></span>
-						<!-- <%# <div class="row_progress">
+						<a class="icon row_load"><span>Load this unloaded Row</span></a>																	
+						<input type="checkbox" value="<%= row_index %>" />
+						<span class="row_title"><%= @export_mode ? "#{row_index}_*.wav" : agg_tuple.first %></span>
+						<a href="javascript:void(0)" class="export_selected" rel="<%=
+						  export_selected_rows_db_unarchived_path_loopoff_path(@db,@unarchived_path) %>">x</a>
+						<%# <div class="row_progress">
 							<div class="row_load_bar" style="width: 100%;">
 								<div class="row_play_bar" style="width: 0%;"></div>
 							</div>
-						</div>											 -%> -->
+						</div>											 -%>
 						<span class="row_misc"></span>
 					</span>
 					<span class="f_right">
@@ -62,24 +66,19 @@ HERE WE GO!
 						<a class="icon row_play_looped"><span>Play Row Looped</span></a>
 					</span>				
 				</td>
-				<%# >> [0,1].fill(nil,2,5) => [0, 1, nil, nil, nil, nil, nil]	 
-				[0,1].fill(nil,2,5)[0..2]
-				HACK this guarantees each row has exactly 3 elements
-				%>
-				<%- max_min_cells = row.cells.dup
-				    max_min_cells.fill(nil,2,20)[0..2]
-				    row.cells.each do |cell| -%>
-				  <%- if cell.nil? -%>
+				<%- agg_tuple.last.each_with_index do |base_file_name,col_index| -%>
+				  <%- if @unarchived_path.cell(row_index,col_index).nil? -%>
 				    <td style="opacity: 0.3; font-size: .65em">n/a</td>
-				  <%- else -%>				  
-				    <td class="audio_cell" id="c<%= "#{cell.x}_#{cell.y}" %>" rel="<%# CONTINUE HERE db_unarchived_path_cell_path(@db,@unarchived_path,cell) %>">
-					    <span><%= "#{@db.to_param}/#{@unarchived_path.to_param}/#{cell.to_param}" %></span>
+				  <%- else -%>
+				    <td class="audio_cell" id="c<%= "#{row_index}_#{col_index}" %>" rel="<%= db_unarchived_path_cell_path(@db,@unarchived_path,"#{row_index},#{col_index}") %>">
 							<span class="f_left cell_title"></span>
-							<span class="cell_misc"></span>
+							<span class="cell_misc">
+								<%= @unarchived_path.cell(row_index,col_index).is_identical ? "identical" : "" -%>								
+							</span>
 							<span class="f_right">
 								  <a id="toggle_mute" href='#'>T</a>
 								 <!-- <a class="icon sound_mute"><span>Un mute this loop</span></a> -->
-								  <a class="icon download_file" href="#">
+								  <a class="icon download_file" href="<%#  %>">
 									  <span>Download this file</span>
 									</a>
 							</span>
@@ -98,8 +97,8 @@ HERE WE GO!
 			</tr>			
 			<%- end -%>
 		</tbody>
-  </table>
-</div><%# opened in _show_header class="loopoff_table_container" id="loopoff_table_1" %>
-<a href="#" class="export_selected" rel="<%# export_selected_rows_directory_path(@unarchived_path) %>">Export selected</a>
-<%# link_to 'Edit', edit_directory_path(@unarchived_path) %> |
-<%# link_to 'Back', directories_path %>
+		    </table>
+			</div><%# opened in _show_header class="loopoff_table_container" id="loopoff_table_1" %>
+			<a href="#" class="export_selected" rel="<%# export_selected_rows_directory_path(@unarchived_path) %>">Export selected</a>
+		<%# link_to 'Edit', edit_directory_path(@unarchived_path) %> |
+		<%# link_to 'Back', directories_path %>

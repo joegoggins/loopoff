@@ -5,22 +5,44 @@ class UnarchivedLoopoffController < Loader::DbController
     if @unarchived_path.nil?
       render :text => "invalid unarchived path, #{params[:unarchived_path_id]}" and return
     end
-    prefix = "cd #{@unarchived_path.path} && "
-    init_command = "#{prefix} git init"
-    add_command = "#{prefix} git add *"
-    commit_command = "#{prefix} git commit -a -m  \"#{@unarchived_path.name} temp repo\""
-    
-    begin
-      @unarchived_path.repo
-    rescue Grit::InvalidGitRepositoryError => e
-      render :text => "No .git dir, do this: <pre>#{init_command}</pre>" and return
-    end
-    if @unarchived_path.repo.commits.empty?
-      render :text => "No commits, do this <pre>#{add_command}\n\n#{commit_command}</pre>" and return
-    end
   end
 
   def show
-    @table = @unarchived_path.table
+    @my_aggregated_files = @unarchived_path.my_aggregated_files
+  end
+  
+  def export_selected_rows    
+    @rows = params[:rows]
+    raise "must be array" unless @rows.kind_of? Array
+    @rows.map! {|x| x.to_i}
+    @the_file_paths = []
+    @unarchived_path.my_aggregated_files.each_with_index do |agg_tuple,row_index|
+      next unless @rows.include?(row_index)
+    	agg_tuple.last.each_with_index do |my_file,col_index|
+    	  if @unarchived_path.cell(row_index,col_index).nil?
+        else
+          @the_file_paths << @unarchived_path.cell(row_index,col_index).name
+        end			  
+     end
+    end
+    # if unspecified make an export dir    
+    if params[:export_dir].blank?
+      actual_export_dir = "exp_#{params[:id]}"
+    else
+      actual_export_dir = params[:export_dir]
+    end
+    
+    export_dir = File.join(@db.path,actual_export_dir)
+    if !File.directory?(export_dir)
+      if File.exists?(export_dir)
+        render :status => 500, :text => "INVALID export dir #{export_dir}, a non-directory exists there"
+      else
+        FileUtils.mkdir(export_dir)
+      end     
+    end
+    FileUtils.cp_r(@the_file_paths,export_dir)
+    respond_to do |format|
+      format.json { render :json =>{:status => :success,:files => @the_file_paths,:export_path => export_dir}} 
+    end
   end
 end

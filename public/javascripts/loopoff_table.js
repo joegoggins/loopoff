@@ -89,7 +89,7 @@ $(document).ready(function() {
 	  console.log(event.target);
 	  $(event.target).closest('tr').find('td.audio_cell').each(function() {
       //      $(this).prepend('pooo');
-      $(this).prepend('L<audio src="' + $(this).attr('rel') + '" autobuffer="autobuffer"></audio>')
+      $(this).prepend('L<audio src="' + $(this).attr('rel') + '" autobuffer="autobuffer" loop="loop"></audio>')
 	  })
   }
   function row_reload(event) {}
@@ -130,10 +130,6 @@ $(document).ready(function() {
 	  })
 	  console.info("sending request to copy files to server");
 	  var export_dir = $.urlParam('export_dir');
-	  if(export_dir == "") {
-	    alert('ERROR: add this to url ?export_dir=X');
-	    return false;
-	  }
 	  if(rows_to_export.length == 0) {
 		  alert('ERROR: No rows selected');
 	    return false;

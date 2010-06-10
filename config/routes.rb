@@ -16,8 +16,14 @@ ActionController::Routing::Routes.draw do |map|
     #            <rel_dir_name><number_of_files><link to table>
     #
     # :loopoff   db/rc50/unarchived/loopoff/import/20090529 => A loopoff table with the contents of the directory
-    db.resources :unarchived_paths, :as => 'unarchived', :controller => 'unarchived_paths',:only => [:index] do |unarchived_path|
-      unarchived_path.resource :loopoff, :only => :show, :controller => 'unarchived_loopoff'
+    db.resources :unarchived_paths, :as => 'unarchived', 
+      :controller => 'unarchived_paths',:only => [:index] do |unarchived_path|
+      unarchived_path.resource :loopoff, 
+        :only => :show, 
+        :member => {
+          :export_selected_rows => :get
+        },
+        :controller => 'unarchived_loopoff'
       unarchived_path.resources :cells, :only => :show, :controller => 'unarchived_path_cell'
     end
     # :index     db/rc50/commits => list view of all commits in the repo like
