@@ -125,6 +125,7 @@ $(document).ready(function() {
     $('.controller_cell input[type=checkbox]').each(function() {		  
 		  if($(this).attr('checked')) {
 			  rows_to_export.push($(this).val());
+			  $(this).removeAttr('checked');
 		  }
 	  })
 	  console.info("sending request to copy files to server");
@@ -132,8 +133,6 @@ $(document).ready(function() {
 		$.getJSON($(evt.target).attr('rel'),export_options, function(json) {
 		  console.info(json);
 		});
-
-//	  document.location.href=the_final_url;
   }
 
   ///////////////// HELPER FUNCTIONS BEGIN
