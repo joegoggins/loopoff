@@ -16,16 +16,15 @@ class UnarchivedPath < Dir
   end
   
   def my_files
-    # if @my_files.blank?
-    #     self.loopoff_files.each do |f|
-    #       @my_files << MyFile.new(:name => f,
-    #         :size => File.size(f),
-    #         :sha => Grit::GitRuby::Internal::LooseStorage.calculate_sha(File.read(f),'blob')
-    #       )
-    #     end        
-    #     puts "WILL BUILD FILE"
-    #   end
-    # end
+    if @my_files.blank?
+      @my_files = []
+      self.loopoff_files.each do |f|
+        @my_files << MyFile.new(:name => f,
+          :size => File.size(f),
+          :sha => self.file_ids_hash[File.basename(f)] #Grit::GitRuby::Internal::LooseStorage.calculate_sha(File.read(f),'blob')
+        )
+      end
+    end
     @my_files    
   end
   
