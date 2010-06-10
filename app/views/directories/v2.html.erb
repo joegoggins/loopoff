@@ -1,3 +1,7 @@
+<h2>Unarchived Dir</h2>
+<p>
+	<%= pluralize(@unarchived_path.my_aggregated_files.length,'row') %> aggregated by prefix
+</p>
 <div class="f_left">
   INPUT:<%# select_tag "input_dir", options_for_select(@directories.map {|x| [x.slug,directory_url(x)]},directory_url(@directory)) %>
 </div>
@@ -61,7 +65,7 @@
 				<td class="controller_cell">
 					<a name="r<%= row_index %>"></a>
 					<span class="f_left">
-						<a class="icon row_load"><span>Load this unloaded Row</span></a>
+						<a class="icon row_load"><span>Load this unloaded Row</span></a>																	
 						<input type="checkbox" value="<%= row_index %>" />
 						<span class="row_title"><%= @export_mode ? "#{row_index}_*.wav" : agg_tuple.first %></span>
 						<%# <div class="row_progress">
@@ -84,7 +88,9 @@
 				  <%- else -%>
 				    <td class="audio_cell" id="c<%= "#{row_index}_#{col_index}" %>" rel="<%= db_unarchived_path_cell_path(@db,@unarchived_path,"#{row_index},#{col_index}") %>">
 							<span class="f_left cell_title"></span>
-							<span class="cell_misc"></span>
+							<span class="cell_misc">
+								<%= @unarchived_path.cell(row_index,col_index).is_identical ? "identical" : "" -%>								
+							</span>
 							<span class="f_right">
 								  <a id="toggle_mute" href='#'>T</a>
 								 <!-- <a class="icon sound_mute"><span>Un mute this loop</span></a> -->

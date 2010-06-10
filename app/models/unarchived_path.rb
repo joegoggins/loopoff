@@ -1,7 +1,7 @@
 class UnarchivedPath < Dir
   # INNER HELPER CLASS
   class MyFile
-    attr_accessor :name, :size, :sha
+    attr_accessor :name, :size, :sha, :is_identical
     def initialize(hash={})
       hash.each_pair do |k,v|
         self.send("#{k}=",v)
@@ -19,8 +19,6 @@ class UnarchivedPath < Dir
     end
   end
   
-  
-  
   attr_reader :db, :repo, :my_files
   def initialize(db, absolute_path)
     @db = db
@@ -33,7 +31,8 @@ class UnarchivedPath < Dir
       self.loopoff_files.each do |f|
         @my_files << MyFile.new(:name => f,
           :size => File.size(f),
-          :sha => self.file_ids_hash[File.basename(f)] #Grit::GitRuby::Internal::LooseStorage.calculate_sha(File.read(f),'blob')
+          :sha => self.file_ids_hash[File.basename(f)],
+          :is_identical => self.db.repo.distinct_blobs.map(&:id).include?(self.file_ids_hash[File.basename(f)])          
         )
       end
     end
