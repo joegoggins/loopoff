@@ -14,7 +14,7 @@ class UnarchivedPath < Dir
     if @cells.blank?
       @cells = []
       self.loopoff_file_names.each do |f|
-        @cells << Lt::Cell.new(:name => f,
+        @cells << Lt::FileCell.new(:name => f,
           :size => File.size(f),
           :sha => self.file_ids_hash[File.basename(f)],
           :is_identical => self.db.repo.distinct_blobs.map(&:id).include?(self.file_ids_hash[File.basename(f)])          
@@ -22,10 +22,6 @@ class UnarchivedPath < Dir
       end
     end
     @cells    
-  end
-
-  def new_cells
-    self.cells.select {|x| !x.is_identical}
   end
   
   def rows
@@ -60,6 +56,11 @@ class UnarchivedPath < Dir
 
   # LOOPOFF TABLE INTERFACE END  
 
+
+  def new_cells
+    self.cells.select {|x| !x.is_identical}
+  end
+
   def repo
     @repo ||= Grit::Repo.new(self.path)
   end
@@ -74,8 +75,8 @@ class UnarchivedPath < Dir
       @my_aggregated_file_hash
     else
       # yields elements like ["007", ["007_2.WAV", "007_3.WAV"]]
-      @my_aggregated_file_hash = self.cells.group_by do |my_file|
-        my_file.basename.split('_').first
+      @my_aggregated_file_hash = self.cells.group_by do |lt_cell|
+        lt_cell.basename.split('_').first
       end
          #{|x| File.basename(x.name)}.group_by {|x| x.split('_').first}.sort
       
@@ -83,9 +84,9 @@ class UnarchivedPath < Dir
       @my_aggregated_file_hash.map do |x| 
         if x.last.length != 3
           modded_3_tuple = [nil,nil,nil]
-          x.last.each_with_index do |my_file,index|
-            f_number = my_file.basename.split('_').last.gsub(/\.WAV/,'').to_i # the 2 or 3 part minus the .WAV
-            modded_3_tuple[f_number-1] = my_file            
+          x.last.each_with_index do |lt_cell,index|
+            f_number = lt_cell.basename.split('_').last.gsub(/\.WAV/,'').to_i # the 2 or 3 part minus the .WAV
+            modded_3_tuple[f_number-1] = lt_cell            
           end
           x[1]=modded_3_tuple
           x
@@ -96,14 +97,14 @@ class UnarchivedPath < Dir
     end
   end
   
-  def my_file_hash
-    if @my_file_hash.blank?
-      @my_file_hash = {}
+  def lt_cell_hash
+    if @lt_cell_hash.blank?
+      @lt_cell_hash = {}
       self.cells.each do |f|
-        @my_file_hash[File.basename(f.name)] = f
+        @lt_cell_hash[File.basename(f.name)] = f
       end
     end
-    @my_file_hash
+    @lt_cell_hash
   end
     
   # the default for export overridable in controller
@@ -137,6 +138,8 @@ class UnarchivedPath < Dir
   end
   
   def loopoff_file_names
-    Db.loopoff_file_names(self.entries.map {|x| File.join(self.path,x)})
-  end
+    self.entries.map {|x| File.join(self.path,x)}.select do |path_to_file|
+      Db.is_loopoff_file_name?(File.basename(path_to_file)) && File.file?(path_to_file)
+    end
+  end  
 end

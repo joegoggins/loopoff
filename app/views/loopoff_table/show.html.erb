@@ -1,0 +1,103 @@
+<h2>Unarchived Dir : <%= @collection.basename %></h2>
+<p><%=  %>
+	<%= pluralize(@collection.rows.length, 'row') %><br />
+	<%= pluralize(@collection.cells.length, 'file') %><br />
+	<%= pluralize(@collection.cells.count {|x| x.is_identical}, 'identical') %>
+</p>
+
+<div class="loopoff_table_container" id="loopoff_container_1">
+	<div class="f_right">
+			<span class="time_ago"></span>
+			<a class="icon playlist_info"><span>Playlist Info</span></a>
+			<div class="jqmWindow" id="playlist_info_content">
+				<a href="#" class="jqmClose">Close</a>
+				<hr />
+				THE CONTENT GOES HERE
+			</div>
+	</div>
+	<table>
+		<thead>
+		<%#- unless @export_mode -%>
+		<tr class="tbl_chng">
+			<th>
+				<a class="icon playlist_oldest" href="http://google.com"><span>Oldest</span></a>
+				<a class="icon playlist_previous" href="http://google.com"><span>Previous</span></a>
+			</th>
+			<th></th>
+		  <th></th>
+			<th></th>
+			<th class="f_right">
+				<a class="icon playlist_next" href="http://google.com"><span>Next</span></a>
+				<a class="icon playlist_newest" href="http://google.com"><span>Newest</span></a>				
+			</th>
+		</tr>
+		<%#- end -%>
+		<tr>
+			<th>Loop Sets</th>
+			<th>1</th>
+			<th>2</th>
+			<th>3</th>
+			<th><span class="f_right">Song Info</span></th>
+		</tr>
+		</thead>
+		<tbody>		
+			<%- @collection.rows.each_with_index do |lt_row,row_index| -%>
+			<tr class="<%= cycle('','alt') %>">
+				<td class="controller_cell">
+					<a name="r<%= row_index %>"></a>
+					<span class="f_left">
+						<a class="icon row_load"><span>Load this unloaded Row</span></a>																	
+						<input name="do_export" type="checkbox" value="<%= row_index %>" />
+
+						<a href="javascript:void(0)" class="export_selected" rel="<%=
+						  export_selected_rows_db_unarchived_path_loopoff_path(@db,@collection) %>">x</a>
+							<a class="icon row_stop"><span>Stop Row and Restore head to 0</span></a>
+							<a class="icon row_pause"><span>Pause Row</span></a>
+							<a class="icon row_play"><span>Play Row</span></a>
+							<a class="icon row_play_looped"><span>Play Row Looped</span></a>
+						<span class="row_title"><%= lt_row.name %></span>						
+						 <div class="row_progress">
+							<div class="row_load_bar" style="width: 100%;">
+								<div class="row_play_bar" style="width: 0%;"></div>
+							</div>
+						</div>											 
+						<span class="row_misc"></span>
+					</span>
+				</td>
+				<%- lt_row.cells.each_with_index do |cell,col_index| -%>
+				  <%- if @collection.cell(row_index,col_index).nil? -%>
+				    <td style="opacity: 0.3; font-size: .65em">n/a</td>
+				  <%- else -%>
+				    <td class="audio_cell" id="c<%= "#{row_index}_#{col_index}" %>" rel="<%= db_unarchived_path_cell_path(@db,@collection,"#{row_index},#{col_index}") %>">
+							<span class="f_left cell_title"></span>
+							<span class="cell_misc">
+								<%= @collection.cell(row_index,col_index).is_identical ? "identical" : "" -%>
+								<%# TODO: put the size in here somewhere, needs to be smaller @collection.cell(row_index,col_index).size -%>
+							</span>
+							<span class="f_right">
+								  <a id="toggle_mute" href='#'>T</a>
+								 <!-- <a class="icon sound_mute"><span>Un mute this loop</span></a> -->
+								  <a class="icon download_file" href="<%#  %>">
+									  <span>Download this file</span>
+									</a>
+							</span>
+					  </td>
+					<%- end -%>
+
+				<%- end -%>
+				<td>
+					<span class="f_left cell_title"></span>
+					<span class="cell_misc"></span>
+					<span class="f_right">
+						<%#  <a class="icon heart"><span>I love this loop</span></a>
+						<a class="icon pencil"><span>Edit the notes and meta data about loop</span></a> -%>
+					</span>
+				</td>
+			</tr>			
+			<%- end -%>
+		</tbody>
+		    </table>
+			</div><%# opened in _show_header class="loopoff_table_container" id="loopoff_table_1" %>
+			<a href="#" class="export_selected" rel="<%# export_selected_rows_directory_path(@collection) %>">Export selected</a>
+		<%# link_to 'Edit', edit_directory_path(@collection) %> |
+		<%# link_to 'Back', directories_path %>

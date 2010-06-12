@@ -9,8 +9,9 @@ class SnapshotLoopoffController < Loader::DbController
 
   def show
     if params[:path_id] == '-'
-      @tree = @commit.tree
       
+      @collection = @commit.tree
+      render :template => 'loopoff_table/show'
     else
       render :text => "sorry bro, only implemented for - aka the \".\" path" and return
     end        

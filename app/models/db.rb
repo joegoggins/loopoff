@@ -1,5 +1,12 @@
 require 'find'
 class Db < Dir
+  
+  # DEFINES THE FILES THAT LOOPOFF CARES ABOUT IN A GIVEN @blob.name or @file.basename
+  #
+  def self.is_loopoff_file_name?(the_basename)
+    the_basename.match(/.wav/i)
+  end
+  
   # returns all paths under loop_db that have a subdir "repo" that in turn has a .git sub-dir  
   # this is a definition of a "Loopoff Db"
   def self.all
@@ -19,21 +26,7 @@ class Db < Dir
   def self.[](db_name)
     self.all.detect {|x| x.name == db_name.to_s}
   end
-  
-  # A utility helper for filtering a set of file names
-  #
-  def self.loopoff_file_names(full_paths_to_files)
-    full_paths_to_files.select do |x|
-      self.is_loopoff_file?(x)
-    end
-  end
-  
-  # If you want this to work with rel paths, wrap in Dir.chdir('the_dir') {}
-  def self.is_loopoff_file?(path_to_file)
-    # TODO: add x.match(/README/) when ready
-    (path_to_file.match(/.WAV/i)) && File.file?(path_to_file)
-  end
-  
+    
   def name
     File.basename(self.path)
   end

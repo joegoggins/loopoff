@@ -8,7 +8,8 @@ class UnarchivedLoopoffController < Loader::DbController
   end
 
   def show
-    # Do nothing, iteration happens from @unarchived_path.aggregated_cells
+    @collection = @unarchived_path
+    render :template => 'loopoff_table/show'
   end
   
   def export_selected_rows    
