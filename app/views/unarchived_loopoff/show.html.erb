@@ -1,8 +1,8 @@
 <h2>Unarchived Dir : <%= @unarchived_path.basename %></h2>
 <p><%=  %>
-	<%= pluralize(@unarchived_path.number_of_rows, 'row') %><br />
-	<%= pluralize(@unarchived_path.number_of_files, 'file') %><br />
-	<%= pluralize(@unarchived_path.number_of_identicals, 'identical') %>
+	<%= pluralize(@unarchived_path.rows.length, 'row') %><br />
+	<%= pluralize(@unarchived_path.cells.length, 'file') %><br />
+	<%= pluralize(@unarchived_path.cells.count {|x| x.is_identical}, 'identical') %>
 </p>
 
 <div class="loopoff_table_container" id="loopoff_container_1">
@@ -41,7 +41,7 @@
 		</tr>
 		</thead>
 		<tbody>		
-			<%- @unarchived_path.my_aggregated_files.each_with_index do |agg_tuple,row_index| -%>
+			<%- @unarchived_path.rows.each_with_index do |lt_row,row_index| -%>
 			<tr class="<%= cycle('','alt') %>">
 				<td class="controller_cell">
 					<a name="r<%= row_index %>"></a>
@@ -55,16 +55,16 @@
 							<a class="icon row_pause"><span>Pause Row</span></a>
 							<a class="icon row_play"><span>Play Row</span></a>
 							<a class="icon row_play_looped"><span>Play Row Looped</span></a>
-						<span class="row_title"><%= @export_mode ? "#{row_index}_*.wav" : agg_tuple.first %></span>						
-						<%# <div class="row_progress">
+						<span class="row_title"><%= lt_row.name %></span>						
+						 <div class="row_progress">
 							<div class="row_load_bar" style="width: 100%;">
 								<div class="row_play_bar" style="width: 0%;"></div>
 							</div>
-						</div>											 -%>
+						</div>											 
 						<span class="row_misc"></span>
 					</span>
 				</td>
-				<%- agg_tuple.last.each_with_index do |base_file_name,col_index| -%>
+				<%- lt_row.cells.each_with_index do |cell,col_index| -%>
 				  <%- if @unarchived_path.cell(row_index,col_index).nil? -%>
 				    <td style="opacity: 0.3; font-size: .65em">n/a</td>
 				  <%- else -%>

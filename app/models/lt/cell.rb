@@ -1,13 +1,18 @@
 class Lt::Cell
-  attr_accessor :row, :x, :y, :identifier
-  def initialize(row, x, y,identifier)
-    @row = row
-    @x=x
-    @y=y
-    @identifier=identifier
+  attr_accessor :name, :size, :sha, :is_identical
+  def initialize(hash={})
+    hash.each_pair do |k,v|
+      self.send("#{k}=",v)
+    end
   end
   
-  def to_param
-    @identifier
+  def basename
+    File.basename(self.name)
+  end
+  alias_method :to_param, :basename
+  
+  
+  def data
+    File.read(self.name)
   end
 end

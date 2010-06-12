@@ -22,7 +22,7 @@ class Db < Dir
   
   # A utility helper for filtering a set of file names
   #
-  def self.loopoff_files(full_paths_to_files)
+  def self.loopoff_file_names(full_paths_to_files)
     full_paths_to_files.select do |x|
       self.is_loopoff_file?(x)
     end

@@ -8,7 +8,7 @@ class UnarchivedLoopoffController < Loader::DbController
   end
 
   def show
-    @my_aggregated_files = @unarchived_path.my_aggregated_files
+    # Do nothing, iteration happens from @unarchived_path.aggregated_cells
   end
   
   def export_selected_rows    
