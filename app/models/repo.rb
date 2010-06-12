@@ -1,4 +1,4 @@
-class Repo < Grit::Repo  
+class Repo < Grit::Repo    
   # WARNING DUPLICATE FROM unarchived path
   def distinct_blobs
     if @distinct_blobs.blank?

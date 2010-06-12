@@ -1,13 +1,19 @@
 class SnapshotLoopoffController < Loader::DbController
-  def load_commit
-    @commit = @db.repo.commit(params[:id])
+  before_filter :load_commit
+  def load_commit    
+    @commit = @db.repo.commit(params[:commit_id])
     if @commit.nil?
       render :text => "invalid commit id, #{params[:commit]}" and return
     end
   end
 
   def show
-        
+    if params[:path_id] == '-'
+      @tree = @commit.tree
+      
+    else
+      render :text => "sorry bro, only implemented for - aka the \".\" path" and return
+    end        
   end
 
 end

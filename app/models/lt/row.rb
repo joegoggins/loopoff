@@ -1,8 +1,8 @@
 class Lt::Row
-  attr_accessor :table, :name, :cells
-  def initialize(table, name="")
-    @table = table
-    @name = name
-    @cells = []
+  attr_accessor :name, :cells
+  def initialize(hash={})
+    hash.each_pair do |k,v|
+      self.send("#{k}=",v)
+    end
   end
 end

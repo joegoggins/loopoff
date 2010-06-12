@@ -6,7 +6,7 @@ module Mixins::GritCommitExtensions
       end
       def t
         't'
-      end
+      end      
     end
   end  
 end
