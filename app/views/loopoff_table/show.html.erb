@@ -68,7 +68,7 @@
 				  <%- if @collection.cell(row_index,col_index).nil? -%>
 				    <td style="opacity: 0.3; font-size: .65em">n/a</td>
 				  <%- else -%>
-				    <td class="audio_cell" id="c<%= "#{row_index}_#{col_index}" %>" rel="<%# db_unarchived_path_cell_path(@db,@collection,"#{row_index},#{col_index}") %>">
+				    <td class="audio_cell" id="c<%= "#{row_index}_#{col_index}" %>" rel="<%= db_commit_path_cell_path(@db,@commit.id,"-",cell.sha) %>">
 							<span class="f_left cell_title"></span>
 							<span class="cell_misc">
 								<%= @collection.cell(row_index,col_index).is_identical ? "identical" : "" -%>
