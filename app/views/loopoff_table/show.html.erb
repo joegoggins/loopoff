@@ -49,7 +49,7 @@
 						<a class="icon row_load"><span>Load this unloaded Row</span></a>																	
 						<input name="do_export" type="checkbox" value="<%= row_index %>" />
 
-						<a href="javascript:void(0)" class="export_selected" rel="<%=
+						<a href="javascript:void(0)" class="export_selected" rel="<%#
 						  export_selected_rows_db_unarchived_path_loopoff_path(@db,@collection) %>">x</a>
 							<a class="icon row_stop"><span>Stop Row and Restore head to 0</span></a>
 							<a class="icon row_pause"><span>Pause Row</span></a>
@@ -68,7 +68,7 @@
 				  <%- if @collection.cell(row_index,col_index).nil? -%>
 				    <td style="opacity: 0.3; font-size: .65em">n/a</td>
 				  <%- else -%>
-				    <td class="audio_cell" id="c<%= "#{row_index}_#{col_index}" %>" rel="<%= db_unarchived_path_cell_path(@db,@collection,"#{row_index},#{col_index}") %>">
+				    <td class="audio_cell" id="c<%= "#{row_index}_#{col_index}" %>" rel="<%# db_unarchived_path_cell_path(@db,@collection,"#{row_index},#{col_index}") %>">
 							<span class="f_left cell_title"></span>
 							<span class="cell_misc">
 								<%= @collection.cell(row_index,col_index).is_identical ? "identical" : "" -%>

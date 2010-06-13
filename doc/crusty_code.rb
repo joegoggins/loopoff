@@ -1,3 +1,23 @@
+b.instance_eval(<<-EOS,__FILE__,__LINE__)
+  def name
+    "#{b.name}"
+  end
+  
+  def size
+    #{b.size}
+  end
+  
+  def sha
+    "#{b.id}"
+  end
+  
+  def is_identical
+    false
+  end
+EOS
+@cells << b
+
+
 # def new_blob_ids
 #   self.distinct_blob_ids - self.db.repo.distinct_blobs.map(&:id)
 # end

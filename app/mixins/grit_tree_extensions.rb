@@ -127,7 +127,7 @@ module Mixins::GritTreeExtensions
       # 
       # def cells
       #   self.entries
-      # end          
+      # end
     end
   end
 end
