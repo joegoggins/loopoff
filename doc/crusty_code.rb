@@ -1,3 +1,14 @@
+#TODO, contineu here
+# @unarchived_path.my_aggregated_files.each_with_index do |agg_tuple,row_index|
+#       next unless @rows.include?(row_index)
+#       agg_tuple.last.each_with_index do |my_file,col_index|
+#         if @unarchived_path.cell(row_index,col_index).nil?
+#         else
+#           @the_file_paths << @unarchived_path.cell(row_index,col_index).name
+#         end       
+#      end
+#     end
+
 b.instance_eval(<<-EOS,__FILE__,__LINE__)
   def name
     "#{b.name}"

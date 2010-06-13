@@ -1,4 +1,10 @@
-<h2>Unarchived Dir : <%= @collection.basename %></h2>
+<h2>
+	<%- if @collection.kind_of? UnarchivedPath -%>
+	Unarchived Path
+	<%- elsif @collection.kind_of? Grit::Tree -%>
+	Relative Commit Path <%= @collection.basename %>
+	<%- else raise "Sorry"; end -%>
+</h2>
 <p><%=  %>
 	<%= pluralize(@collection.rows.length, 'row') %><br />
 	<%= pluralize(@collection.cells.length, 'file') %><br />
@@ -49,7 +55,7 @@
 						<a class="icon row_load"><span>Load this unloaded Row</span></a>																	
 						<input name="do_export" type="checkbox" value="<%= row_index %>" />
 
-						<a href="javascript:void(0)" class="export_selected" rel="<%#
+						<a href="javascript:void(0)" class="export_selected" rel="<%=
 						  export_selected_rows_db_unarchived_path_loopoff_path(@db,@collection) %>">x</a>
 							<a class="icon row_stop"><span>Stop Row and Restore head to 0</span></a>
 							<a class="icon row_pause"><span>Pause Row</span></a>
@@ -95,9 +101,15 @@
 
 				<%- end -%>
 				<td>
+					<span style="font-size: .7em">
+					
+					</span>
 					<span class="f_left cell_title"></span>
 					<span class="cell_misc"></span>
 					<span class="f_right">
+						<%- unless @commit.blank? -%>
+						<%= @commit.extract_row_name_from_message(lt_row.name) %>
+						<%- end -%>
 						<%#  <a class="icon heart"><span>I love this loop</span></a>
 						<a class="icon pencil"><span>Edit the notes and meta data about loop</span></a> -%>
 					</span>

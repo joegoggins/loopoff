@@ -1,0 +1,4 @@
+need to know how long the loop is in seconds, especially when its long
+don't think it's possible, but it would be nice to group by jam session
+  aka timestamps within hours of one another, only possible if rc-50 preserves that
+  don't know...

@@ -16,29 +16,37 @@ class UnarchivedLoopoffController < Loader::DbController
     @rows = params[:rows]
     raise "must be array" unless @rows.kind_of? Array
     @rows.map! {|x| x.to_i}
-    @the_file_paths = []
-    @unarchived_path.my_aggregated_files.each_with_index do |agg_tuple,row_index|
-      next unless @rows.include?(row_index)
-    	agg_tuple.last.each_with_index do |my_file,col_index|
-    	  if @unarchived_path.cell(row_index,col_index).nil?
-        else
-          @the_file_paths << @unarchived_path.cell(row_index,col_index).name
-        end			  
-     end
+
+    @export_dir = File.join(@db.path,params[:export_dir].blank? ? @unarchived_path.export_path : params[:export_dir])
+    make_export_dir_if_needed
+    
+    @lt_rows = @unarchived_path.rows.values_at(*@rows)
+    @lt_rows.each do |lt_row|
+      lt_row.cells.each do |cell|
+        next if cell.nil?
+        File.open(File.join(@export_dir,cell.basename),'w') do |target|
+          target.print cell.data # NOT puts (adds a \n char to the binary)
+        end
+      end
     end
 
-    # SECURITY: UNSANITIZED params[:export_dir]    
-    export_dir = File.join(@db.path,params[:export_dir].blank? ? @unarchived_path.export_path : params[:export_dir])
-    if !File.directory?(export_dir)
-      if File.exists?(export_dir)
-        render :status => 500, :text => "INVALID export dir #{export_dir}, a non-directory exists there"
-      else
-        FileUtils.mkdir(export_dir)
-      end     
-    end
-    FileUtils.cp_r(@the_file_paths,export_dir)
+    
+
+    # SECURITY: UNSANITIZED params[:@export_dir]    
+    
+    #FileUtils.cp_r(@the_file_paths,@export_dir)
     respond_to do |format|
-      format.json { render :json =>{:status => :success,:files => @the_file_paths,:export_path => export_dir}} 
+      format.json { render :json =>{:status => :success,:files => @the_file_paths,:export_path => @export_dir}} 
     end
   end
 end
+
+  def make_export_dir_if_needed    
+    if !File.directory?(@export_dir)
+      if File.exists?(@export_dir)
+        render :status => 500, :text => "INVALID export dir #{@export_dir}, a non-directory exists there"
+      else
+        FileUtils.mkdir(@export_dir)
+      end     
+    end    
+  end

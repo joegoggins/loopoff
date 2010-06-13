@@ -5,11 +5,13 @@ module Mixins::GritTreeExtensions
       def cells
         if @cells.blank?
           @cells = []
+          #@commit.message.to_a.select {|x| x.match(Regexp.new("^" + "028"))}.map {|t| {:title => t.split(' ')[1..-1].join(' ')}}
           self.loopoff_blobs.each do |b|            
             @cells << Lt::BlobCell.new(:name => b.name,
               :size => nil, # b.size is expensive to compute, hell with it
               :sha => b.id,
-              :is_identical => false          
+              :is_identical => false      
+                  
             )
           end
         end
@@ -38,7 +40,8 @@ module Mixins::GritTreeExtensions
       # end
 
       def to_param
-        self.name
+        "-" # TODO: fix, hardcoded to root path of tree
+        #self.name
       end
 
       # def basename

@@ -54,6 +54,11 @@ class UnarchivedPath < Dir
     File.basename(self.path)
   end
 
+  # the default for export overridable in controller
+  def export_path
+    "exp_#{self.basename.gsub(/[^A-Za-z0-9_]/,'_')}"
+  end
+
   # LOOPOFF TABLE INTERFACE END  
 
 
@@ -107,10 +112,6 @@ class UnarchivedPath < Dir
     @lt_cell_hash
   end
     
-  # the default for export overridable in controller
-  def export_path
-    "exp_#{self.basename.gsub(/[^A-Za-z0-9_]/,'_')}"
-  end
   
   
   # p = Db[:rc50].unarchived_paths(/07/)[0]
