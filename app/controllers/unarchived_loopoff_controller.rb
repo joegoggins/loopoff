@@ -8,7 +8,7 @@ class UnarchivedLoopoffController < Loader::DbController
   end
 
   def show
-    @collection = @unarchived_path
+    @collection = @unarchived_path    
     render :template => 'loopoff_table/show'
   end
   
