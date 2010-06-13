@@ -9,7 +9,10 @@ class SnapshotLoopoffController < Loader::DbController
 
   def show
     if params[:path_id] == '-'
-      
+      # This is to avoid
+      # A copy of Mixins::GritTreeExtensions has been removed from the module tree but is still active
+      # while in development
+      Grit::Tree.send(:include, Mixins::GritTreeExtensions)
       @collection = @commit.tree
       render :template => 'loopoff_table/show'
     else

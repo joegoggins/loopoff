@@ -5,9 +5,9 @@ module Mixins::GritTreeExtensions
       def cells
         if @cells.blank?
           @cells = []
-          self.loopoff_blobs.each do |b|
+          self.loopoff_blobs.each do |b|            
             @cells << Lt::BlobCell.new(:name => b.name,
-              :size => b.size,
+              :size => nil, # b.size is expensive to compute, hell with it
               :sha => b.id,
               :is_identical => false          
             )
