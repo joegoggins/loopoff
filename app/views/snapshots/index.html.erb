@@ -1,6 +1,10 @@
 <h1>Snapshots#index</h1>
 <ul>
 	<%- @commits.each do |c| -%>
-		<li><%= c.to_s %> : <%= c.message %> : <%= link_to "Details", db_commit_path(@db.name,c.sha)  %></li>
+		<li><%= c.to_s %> : <%= link_to "Details", db_commit_path(@db.name,c.sha)  %>
+			<pre>
+			<%= c.message %>	
+			</pre>
+    </li>
 	<%- end -%>
 </ul>
