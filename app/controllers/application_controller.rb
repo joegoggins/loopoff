@@ -11,6 +11,17 @@ class ApplicationController < ActionController::Base
     @export_playlist = Playlist.find_or_create_by_title('first_playlist') # HARD CODED
   end
   
+  
+  def make_export_dir_if_needed    
+    if !File.directory?(@export_dir)
+      if File.exists?(@export_dir)
+        render :status => 500, :text => "INVALID export dir #{@export_dir}, a non-directory exists there"
+      else
+        FileUtils.mkdir(@export_dir)
+      end     
+    end    
+  end
+  
   def global_css_files
     ['application','jq_modal']
   end

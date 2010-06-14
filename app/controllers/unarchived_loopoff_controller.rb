@@ -40,13 +40,3 @@ class UnarchivedLoopoffController < Loader::DbController
     end
   end
 end
-
-  def make_export_dir_if_needed    
-    if !File.directory?(@export_dir)
-      if File.exists?(@export_dir)
-        render :status => 500, :text => "INVALID export dir #{@export_dir}, a non-directory exists there"
-      else
-        FileUtils.mkdir(@export_dir)
-      end     
-    end    
-  end

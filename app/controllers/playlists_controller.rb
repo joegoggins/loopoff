@@ -1,5 +1,32 @@
 class PlaylistsController < ApplicationController
   def export_all_files
+    @db = Db[:rc50]
+    @playlist = Playlist.find(params[:id])
+    to_copy = []
+    
+    # TODO: make the export_dir NOT in the rc50 sub-dir
+    # to allow for playlists that span mutiple devices/loopoff dbs
+    # now I'm assuming it's a rc50 export
+    # this code below puts things where they should be eventually
+    #@export_dir = File.join(RAILS_ROOT,'loop_db','playlist_export',@playlist.export_path)
+    
+    @export_dir = File.join(@db.path,'playlist_export',@playlist.export_path)
+    @playlist.rows.each_with_index do |row,rindex|
+      row.cells.each_with_index do |cell,cindex|
+        f_name_prefix=(rindex+1).to_s.rjust(3,"0") # produces strings like 001 021 099, etc        
+        target_name = f_name_prefix + "_" + (cindex + 1).to_s + ".WAV"
+        full_target_path = File.join(@export_dir,target_name)
+        source_blob = cell.blob
+        to_copy << [source_blob, full_target_path]        
+      end
+    end
+    make_export_dir_if_needed
+    to_copy.each do |tuple|
+      File.open(tuple.last,'w') do |target|
+        target.print tuple.first.data # NOT puts (adds a \n char to the binary)
+      end
+    end
+    render :text => 'hi exporter guy' and return
   end
   
   # GET /playlists

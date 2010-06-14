@@ -11,4 +11,8 @@ class Playlist < ActiveRecord::Base
     end
   end
   
+  # default 
+  def export_path
+    "#{self.title.gsub(/[^A-Za-z0-9_]/,'_')}"
+  end
 end
