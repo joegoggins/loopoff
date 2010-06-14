@@ -65,7 +65,10 @@
 						add_selected_rows_to_playlist_db_commit_path_loopoff_path(@db,@commit.id,"-") %>">a</a>
 						<%- elsif lt_row.cells.any? {|x| x.kind_of? Lt::FileCell} -%>
 						<a href="javascript:void(0)" class="export_selected" rel="<%=
-						  export_selected_rows_db_unarchived_path_loopoff_path(@db,@collection) %>">x</a>						
+						  export_selected_rows_db_unarchived_path_loopoff_path(@db,@collection) %>">x</a>
+						<%- elsif lt_row.cells.any? {|x| x.kind_of? PlaylistCell} -%>				
+						<a href="javascript:void(0)" class="delete_row_from_playlist" rel="<%=
+						  delete_row_playlist_path(@collection, {:row_index => row_index}) %>">d</a>
             <%- end -%>
 							<a class="icon row_stop"><span>Stop Row and Restore head to 0</span></a>
 							<a class="icon row_pause"><span>Pause Row</span></a>

@@ -1,7 +1,29 @@
 class PlaylistsController < ApplicationController
-  def export_all_files
+  before_filter :load_playlist_and_db_hack, :only => [:delete_row, :export_all_files]
+  
+  def load_playlist_and_db_hack
     @db = Db[:rc50]
-    @playlist = Playlist.find(params[:id])
+    @playlist = Playlist.find(params[:id])    
+  end  
+  
+  def delete_row
+    begin
+      @row_index = params[:row_index].to_i
+    rescue
+      render :text => "ERROR params[:row_index] not specified",:status => 500 and return
+    end
+
+    @playlist_row = @playlist.rows[@row_index]
+    if @playlist_row.destroy
+      respond_to do |format|
+        format.json { render :json =>{:status => :success}} 
+      end
+    else
+      render :text => "ERROR could not destroy",:status => 500 and return
+    end
+  end
+  
+  def export_all_files
     to_copy = []
     
     # TODO: make the export_dir NOT in the rc50 sub-dir

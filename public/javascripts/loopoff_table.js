@@ -14,7 +14,8 @@ var actions=[
 	'row_stop',
 	'cell_toggle_mute',
 	'export_selected',
-	'add_selected_to_playlist'
+	'add_selected_to_playlist',
+	'delete_row_from_playlist'
 ];
 
 $(document).ready(function() {	
@@ -178,6 +179,20 @@ $(document).ready(function() {
 		});
   }
 
+  function delete_row_from_playlist(evt) {
+	  var x = confirm("Are you sure you want to delete this file reference from the playlist?");
+	  if(!x) {
+		  return false;
+	  }
+		$.getJSON($(evt.target).attr('rel'),{}, function(json) {
+			if(json != null && json.status == "success") {
+			  $(evt.target).closest('tr').remove();
+		  }
+		  else {
+			  $(evt.target).after(' FAILURE');			
+		  }		  
+		});	 
+  }
 
 	function cell_toggle_mute(evt) {
 		var audio_obj = $(evt.target).closest('td.audio_cell').find('audio')[0];
