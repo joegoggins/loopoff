@@ -146,7 +146,24 @@ $(document).ready(function() {
 		  }
 		  
 		});
+	  
+		
+  } 
+
+	function cell_toggle_mute(evt) {
+		var audio_obj = $(evt.target).closest('td.audio_cell').find('audio')[0];
+		if(audio_obj == null) {
+		  alert('Error, could not find the audio obj to mute');	
+		}
+		if(audio_obj.volume > 0) {
+		  audio_obj.volume = 0;
+		}
+		else {
+		  audio_obj.volume = 1;
+		}		
   }
+
+
 
   ///////////////// HELPER FUNCTIONS BEGIN
   function pause_and_reset_playhead_if_playing(audio_inst) {
@@ -170,6 +187,8 @@ $(document).ready(function() {
   ///////////////// HELPER FUNCTIONS END
 
 
+  // THE MOST IMPORTANT STUFF...bind all action css classes
+  // with functions that handle their stuff
 	$(actions).each(function(index) {
 		$('.' + this).each(function() {
       //console.info(this);
