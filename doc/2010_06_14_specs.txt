@@ -32,10 +32,14 @@ script/generate model PlaylistCell playlist_row:belongs_to blob_id:string commit
 
 
 TASKS
-build the the playlist plumbing + model associations (1)
-target {:add_row => :get} from snapshot loopoff controller via ajax to add (2)
+target {:add_row => :get} from snapshot loopoff controller via ajax to add (3)
+be able to rock a playlist independently
+
 export all files (3)
 
+
+DONE 
+build the the playlist plumbing + model associations (1)
 
 FIXTURES:
 >> puts Db[:rc50].repo.commit('07629b197505a9c932d416107d0e677f682ec314').message

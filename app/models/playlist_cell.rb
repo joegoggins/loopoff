@@ -1,5 +1,6 @@
 class PlaylistCell < ActiveRecord::Base
   belongs_to :playlist_row
+  acts_as_list :scope => :playlist_row
   
   def commit
     @commit ||= Db[self.loopoff_db.to_sym].repo.commit(self.commit_id)

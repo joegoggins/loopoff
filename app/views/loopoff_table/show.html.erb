@@ -54,9 +54,17 @@
 					<span class="f_left">
 						<a class="icon row_load"><span>Load this unloaded Row</span></a>																	
 						<input name="do_export" type="checkbox" value="<%= row_index %>" />
-
+            
+           
+            <%- 
+            # only stuff in the repo can "add to playlist"
+            if lt_row.cells.any? {|x| x.kind_of? Lt::BlobCell} -%>
+						<a href="javascript:void(0)" class="add_selected_to_playlist" rel="<%=
+						add_selected_rows_to_playlist_db_commit_path_loopoff_path(@db,@commit.id,"-") %>">a</a>
+						<%- elsif lt_row.cells.any? {|x| x.kind_of? Lt::FileCell} -%>
 						<a href="javascript:void(0)" class="export_selected" rel="<%=
-						  export_selected_rows_db_unarchived_path_loopoff_path(@db,@collection) %>">x</a>
+						  export_selected_rows_db_unarchived_path_loopoff_path(@db,@collection) %>">x</a>						
+            <%- end -%>
 							<a class="icon row_stop"><span>Stop Row and Restore head to 0</span></a>
 							<a class="icon row_pause"><span>Pause Row</span></a>
 							<a class="icon row_play"><span>Play Row</span></a>

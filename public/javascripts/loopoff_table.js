@@ -13,7 +13,8 @@ var actions=[
 	'row_pause',
 	'row_stop',
 	'cell_toggle_mute',
-	'export_selected'
+	'export_selected',
+	'add_selected_to_playlist'
 ];
 
 $(document).ready(function() {	
@@ -146,9 +147,37 @@ $(document).ready(function() {
 		  }
 		  
 		});
-	  
-		
   } 
+
+  function add_selected_to_playlist(evt) {
+	  // TODO: REFACTOR DUPLICATION with export_selected function
+	  rows_to_export = [];
+    $('.controller_cell input[type=checkbox]').each(function() {		  
+		  if($(this).attr('checked')) {
+			  rows_to_export.push($(this).val());
+			  $(this).removeAttr('checked');
+		  }
+	  })
+	  if(rows_to_export.length == 0) {
+		  alert('ERROR: No rows selected');
+	    return false;
+	  }
+	  
+	  //var export_dir = $.urlParam('export_playlist_id');
+	  //playlists/<ID>/add_selected?commit_id=<X>&blob_ids=<B1>,<B2>,<B3>
+		var playlist_options ={"rows":rows_to_export,"playlist_export_id":"1"}; //HARD CODED to 1
+		$.getJSON($(evt.target).attr('rel'),playlist_options, function(json) {
+		  console.info(json);
+		  if(json != null && json.status == "success") {
+			$(evt.target).after(' Exported');			
+		  }
+		  else {
+			$(evt.target).after(' FAILURE');			
+		  }
+		  
+		});
+  }
+
 
 	function cell_toggle_mute(evt) {
 		var audio_obj = $(evt.target).closest('td.audio_cell').find('audio')[0];
@@ -162,8 +191,6 @@ $(document).ready(function() {
 		  audio_obj.volume = 1;
 		}		
   }
-
-
 
   ///////////////// HELPER FUNCTIONS BEGIN
   function pause_and_reset_playhead_if_playing(audio_inst) {

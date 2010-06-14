@@ -35,7 +35,11 @@ ActionController::Routing::Routes.draw do |map|
     #           if sub directories in this
     db.resources :commits, :as => 'snapshots', :only => [:index, :show], :controller => 'snapshots' do |commit|
       commit.resources :paths,  :only => :show, :controller => 'snapshot_commit_path' do |path|
-        path.resource :loopoff, :only => :show, :controller => 'snapshot_loopoff'
+        path.resource :loopoff, :only => :show, 
+          :member => {
+            :add_selected_rows_to_playlist => :get
+          },
+        :controller => 'snapshot_loopoff'
         path.resources :cells, :only => :show, :controller => 'snapshot_commit_path_cell'
       end
     end
@@ -45,7 +49,6 @@ ActionController::Routing::Routes.draw do |map|
   #
   map.resources :playlists,
     :member => {
-      :add_row => :get,
       :delete_row => :get,
       :export_all => :get
     } do |playlist|

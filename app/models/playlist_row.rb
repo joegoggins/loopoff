@@ -1,5 +1,7 @@
 class PlaylistRow < ActiveRecord::Base
   belongs_to :playlist
+  acts_as_list :scope => :playlist
+  
   has_many :cells, :class_name => "PlaylistCell", :order => "position",:dependent => :delete_all
 
   def commit
@@ -7,7 +9,6 @@ class PlaylistRow < ActiveRecord::Base
   end
   
   def title_from_commit_message
-    debugger
     self.commit.extract_row_name_from_message(self.aggregation_string)
   end
 end
