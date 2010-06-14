@@ -9,11 +9,39 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100527025950) do
+ActiveRecord::Schema.define(:version => 20100614165542) do
 
   create_table "directories", :force => true do |t|
     t.string   "slug"
     t.string   "path"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "playlist_cells", :force => true do |t|
+    t.integer  "playlist_row_id"
+    t.string   "blob_id"
+    t.string   "commit_id"
+    t.string   "loopoff_db"
+    t.string   "name"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "playlist_rows", :force => true do |t|
+    t.integer  "playlist_id"
+    t.string   "aggregation_string"
+    t.string   "commit_id"
+    t.string   "loopoff_db"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "playlists", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

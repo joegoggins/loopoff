@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  playlist: 
+  aggregation_string: MyString
+  commit_id: MyString
+  position: 1
+
+two:
+  playlist: 
+  aggregation_string: MyString
+  commit_id: MyString
+  position: 1

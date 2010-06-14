@@ -1,0 +1,14 @@
+<strong>You probably want this page    <%= link_to 'Loopoff', playlist_loopoff_path(@playlist) %></strong>
+<p>
+  <b>Title:</b>
+  <%=h @playlist.title %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @playlist.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_playlist_path(@playlist) %> |
+<%= link_to 'Back', playlists_path %>

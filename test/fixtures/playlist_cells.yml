@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  playlist_row: 
+  blob_id: MyString
+  commit_id: MyString
+  loopoff_db: MyString
+  name: MyString
+  position: 1
+
+two:
+  playlist_row: 
+  blob_id: MyString
+  commit_id: MyString
+  loopoff_db: MyString
+  name: MyString
+  position: 1

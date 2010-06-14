@@ -1,0 +1,17 @@
+<h1>PlaylistLoopoff#show</h1>
+<p>Find me in app/views/playlist_loopoff/show.html.erb</p>
+
+<table>
+<%- @playlist.rows.each_with_index do |pl_row,row_index| -%>
+<tr>
+  <td><%= pl_row.aggregation_string %></td>
+  <%- pl_row.cells.each_with_index do |pl_cell,cell_index| -%>
+  <td>
+	<span><%= pl_cell.blob_id %></span>
+	<span><%= pl_cell.commit_id %></span>
+	<span><%= link_to "Binary", playlist_cell_path(@playlist,pl_cell) %></span>
+	</td>
+  <%- end -%>
+  <td><%= pl_row.title_from_commit_message %></td></tr>
+<%- end -%>
+</table

@@ -1,0 +1,66 @@
+need to be able to render an abitrary subset of the archive as a "playlist"
+  would be nice if the names were correctly extracted from the commit message
+
+need to be able to export this subset to a set of file names that can be downloaded to loop station
+
+
+USE CASES
+/playlists => see a list of playlists
+/playlists/new => make a new one (give it a title and description)
+
+On a page like
+http://localhost:3000/db/rc50/snapshots/07629b197505a9c932d416107d0e677f682ec314/paths/-/loopoff
+select export path from a <select> at the top right (params[:export_playlist_id])
+
+Click "p" to add this row to the currently selected playlist
+
+Trawl the thru the archive and do this for this show...
+
+/playlists/1/loopoff => draws the loopoff table
+  "d" deletes the row from the playlist (sql table not archive)
+  "export all files" => creates a set of files starting at 006 on up to 099 (regardless of what they are actually named)
+  eventually you'll be able to do re-ordering here as well
+
+
+TECHNICAL SPECS
+script/generate scaffold Playlist title:string description:text
+  add actions
+  :member => {:delete_row => :get, :export_all => :get}
+script/generate model PlaylistRow playlist:belongs_to aggregation_string:string commit_id:string loopoff_db:string position:integer
+script/generate model PlaylistCell playlist_row:belongs_to blob_id:string commit_id:string loopoff_db:string name:string position:integer
+
+
+
+TASKS
+build the the playlist plumbing + model associations (1)
+target {:add_row => :get} from snapshot loopoff controller via ajax to add (2)
+export all files (3)
+
+
+FIXTURES:
+>> puts Db[:rc50].repo.commit('07629b197505a9c932d416107d0e677f682ec314').message
+006 Sun is cold sun is cold chill piano thing
+008 Chill Piano riffage
+...
+
+>> Db[:rc50].repo.commit('07629b197505a9c932d416107d0e677f682ec314').tree.blobs[0].name
+=> "006_1.WAV"
+080b13b04afb104948c138f5d8f1120c2bf93e93
+
+>> Db[:rc50].repo.commit('07629b197505a9c932d416107d0e677f682ec314').tree.blobs[1].name
+=> "006_2.WAV"
+
+f6e2d989eb71f9e8862de80c4942dfb421c4a1ed
+
+>> Db[:rc50].repo.commit('07629b197505a9c932d416107d0e677f682ec314').tree.blobs[2].name
+=> "008_1.WAV"
+
+>> p = Playlist.first
+=> #<Playlist id: 1, title: "p1", description: "p1\r\ndescr", created_at: "2010-06-14 16:18:18", updated_at: "2010-06-14 16:18:18">
+>> p.rows.create(:aggregation_string => '006',:position => 1,:commit_id => '07629b197505a9c932d416107d0e677f682ec314',:loopoff_db => 'rc50')
+
+r = PlaylistRow.first
+>> r.cells.create(:blob_id => '080b13b04afb104948c138f5d8f1120c2bf93e93',
+:commit_id => '07629b197505a9c932d416107d0e677f682ec314',
+:loopoff_db => 'rc50',:name =>'006_1.WAV',:position => 1)
+=> #<PlaylistCell id: 1, playlist_row_id: 1, blob_id: "810c66e795db7a9cbfea9735f11336629ab6db30", loopoff_db: "rc50", name: "006_1.WAV", position: 1, created_at: "2010-06-14 16:36:15", updated_at: "2010-06-14 16:36:15">

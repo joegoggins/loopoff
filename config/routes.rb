@@ -41,9 +41,23 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
   
+  # :show => the loopoff table
+  #
+  map.resources :playlists,
+    :member => {
+      :add_row => :get,
+      :delete_row => :get,
+      :export_all => :get
+    } do |playlist|
+    playlist.resource :loopoff, :only => :show, :controller => 'playlist_loopoff'
+    playlist.resources :cells, :only => :show, :controller => 'playlist_cells' # serves up the binary
+  end
+  
   #
   map.root :controller => 'main'
     
+  
+  # CRUSTY CODE TO BE DELETED
   map.resources :directories, 
     :member => {
       :v2 => :get,
