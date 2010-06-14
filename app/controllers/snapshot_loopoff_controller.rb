@@ -47,11 +47,10 @@ class SnapshotLoopoffController < Loader::DbController
     @rows = params[:rows]
     raise "must be array" unless @rows.kind_of? Array
     @rows.map! {|x| x.to_i}
-    
-    @playlist = Playlist.find(params[:playlist_export_id])
+        
     @lt_rows = @collection.rows.values_at(*@rows)
     @lt_rows.each do |lt_row|
-      pl_row = @playlist.rows.create(:aggregation_string => lt_row.name,
+      pl_row = @export_playlist.rows.create(:aggregation_string => lt_row.name,
         :commit_id => @commit.id,
         :loopoff_db => @db.to_param
       )      

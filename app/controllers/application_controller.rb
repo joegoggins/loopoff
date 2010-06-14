@@ -5,6 +5,12 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
   
+  
+  before_filter :load_export_playlist
+  def load_export_playlist
+    @export_playlist = Playlist.find_or_create_by_title('first_playlist') # HARD CODED
+  end
+  
   def global_css_files
     ['application','jq_modal']
   end

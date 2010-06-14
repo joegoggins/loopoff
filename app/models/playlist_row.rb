@@ -11,4 +11,9 @@ class PlaylistRow < ActiveRecord::Base
   def title_from_commit_message
     self.commit.extract_row_name_from_message(self.aggregation_string)
   end
+  
+  
+  def name
+    self.aggregation_string
+  end
 end

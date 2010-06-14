@@ -1,9 +1,11 @@
 <h2>
 	<%- if @collection.kind_of? UnarchivedPath -%>
-	Unarchived Path
+	Unarchived Path: <%= @collection.basename %>
 	<%- elsif @collection.kind_of? Grit::Tree -%>
-	Relative Commit Path <%= @collection.basename %>
-	<%- else raise "Sorry"; end -%>
+	Relative Commit Path: <%= @collection.basename %>
+	<%- elsif @collection.kind_of? Playlist -%>
+	Playlist: <%= @collection.title %>
+	<%- end -%>
 </h2>
 <p><%=  %>
 	<%= pluralize(@collection.rows.length, 'row') %><br />
@@ -79,23 +81,27 @@
 					</span>
 				</td>
 				<%- lt_row.cells.each_with_index do |cell,col_index| -%>
-				  <%- if @collection.cell(row_index,col_index).nil? -%>
+				  <%- if cell.nil? -%>
 				    <td style="opacity: 0.3; font-size: .65em">n/a</td>
 				  <%- else -%>
 				    <td class="audio_cell" id="c<%= "#{row_index}_#{col_index}" %>" rel="<%=
-				  if @collection.cell(row_index,col_index).kind_of? Lt::FileCell
+
+				  if cell.kind_of? Lt::FileCell
 					  db_unarchived_path_cell_path(@db,@unarchived_path,"#{row_index},#{col_index}")
-					elsif @collection.cell(row_index,col_index).kind_of? Lt::BlobCell
+					elsif cell.kind_of? Lt::BlobCell
 						db_commit_path_cell_path(@db,@commit.id,"-",cell.sha)
+					elsif cell.kind_of? PlaylistCell
+						playlist_cell_path(@collection,cell)
 					else
-						raise "Dont know what to do with cell of type #{@collection.cell(row_index,col_index)}"
+						raise "Dont know what to do with cell of type #{cell}"
 					end
 					
 				  %>">
 							<span class="f_left cell_title"></span>
 							<span class="cell_misc">
-								<%= @collection.cell(row_index,col_index).is_identical ? "identical" : "" -%>
-								<%# TODO: put the size in here somewhere, needs to be smaller @collection.cell(row_index,col_index).size -%>
+								<%- if cell.respond_to? :is_identical -%>
+								<%= @collection.cell(row_index,col_index).is_identical ? "identical" : "" -%>								
+								<%- end -%>
 							</span>
 							<span class="f_right">
 								  <a class="icon cell_toggle_mute"><span>Un mute this loop</span></a>
