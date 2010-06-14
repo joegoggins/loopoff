@@ -9,7 +9,7 @@ class UnarchivedLoopoffController < Loader::DbController
 
   def show
     @collection = @unarchived_path    
-    render :template => 'loopoff_table/show'
+    render :partial => 'loopoff_table/show', :layout => true
   end
   
   def export_selected_rows    

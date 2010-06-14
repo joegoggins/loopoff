@@ -1,4 +1,7 @@
 class PlaylistsController < ApplicationController
+  def export_all_files
+  end
+  
   # GET /playlists
   # GET /playlists.xml
   def index

@@ -1,4 +1,3 @@
-
 <table>
 <%- @playlist.rows.each_with_index do |pl_row,row_index| -%>
 <tr>
@@ -12,4 +11,6 @@
   <%- end -%>
   <td><%= pl_row.title_from_commit_message %></td></tr>
 <%- end -%>
-</table
+</table>
+
+<%= render :partial => 'loopoff_table/show' %>

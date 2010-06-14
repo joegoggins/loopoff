@@ -1,7 +1,14 @@
 class PlaylistLoopoffController < ApplicationController
-  def show
+  before_filter :load_playlist
+  def load_playlist
     @playlist = Playlist.find(params[:playlist_id])
+  end
+  
+  def show    
     @collection = @playlist
-    render :template => 'loopoff_table/show'
+  end
+  
+  def export_files
+    debugger
   end
 end

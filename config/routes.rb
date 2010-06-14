@@ -50,7 +50,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :playlists,
     :member => {
       :delete_row => :get,
-      :export_all => :get
+      :export_all_files => :get
     } do |playlist|
     playlist.resource :loopoff, :only => :show, :controller => 'playlist_loopoff'
     playlist.resources :cells, :only => :show, :controller => 'playlist_cells' # serves up the binary

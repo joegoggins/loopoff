@@ -19,30 +19,11 @@ class SnapshotLoopoffController < Loader::DbController
   end
 
   def show
-    render :template => 'loopoff_table/show'    
+    render :partial => 'loopoff_table/show', :layout => true
     # do nothing, already loaded via before_filter    
   end
 
-
-  # def export_selected_rows    
-  #    @rows = params[:rows]
-  #    raise "must be array" unless @rows.kind_of? Array
-  #    @rows.map! {|x| x.to_i}
-  # 
-  #    @export_dir = File.join(@db.path,params[:export_dir].blank? ? @unarchived_path.export_path : params[:export_dir])
-  #    make_export_dir_if_needed
-  # 
-     # @lt_rows = @unarchived_path.rows.values_at(*@rows)
-     # @lt_rows.each do |lt_row|
-     #   lt_row.cells.each do |cell|
-     #     next if cell.nil?
-     #     File.open(File.join(@export_dir,cell.basename),'w') do |target|
-     #       target.print cell.data # NOT puts (adds a \n char to the binary)
-     #     end
-     #   end
-     # end
-  # 
-
+  # TODO: DUPLICATION CLEANUP
   def add_selected_rows_to_playlist
     @rows = params[:rows]
     raise "must be array" unless @rows.kind_of? Array
@@ -50,23 +31,16 @@ class SnapshotLoopoffController < Loader::DbController
         
     @lt_rows = @collection.rows.values_at(*@rows)
     @lt_rows.each do |lt_row|
-      pl_row = @export_playlist.rows.create(:aggregation_string => lt_row.name,
-        :commit_id => @commit.id,
-        :loopoff_db => @db.to_param
+      pl_row = @export_playlist.rows.find_or_create_by_aggregation_string_and_commit_id_and_loopoff_db(
+        lt_row.name,@commit.id, @db.to_param
       )      
       lt_row.cells.each do |cell|
         next if cell.nil?        
-        pl_row.cells.create(:blob_id => cell.id,
-          :commit_id => @commit.id,
-          :loopoff_db => @db.to_param,
-          :name =>cell.name
+        pl_row.cells.find_or_create_by_blob_id_and_commit_id_and_loopoff_db_and_name(
+         cell.sha, @commit.id, @db.to_param,cell.name
         )
       end
     end
-
-    
-    
-    
     render :text => 'hi' and return
-  end
+  end  
 end
