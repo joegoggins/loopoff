@@ -91,7 +91,7 @@ $(document).ready(function() {
 	  console.log(event.target);
 	  $(event.target).closest('tr').find('td.audio_cell').each(function() {      
       $(this).prepend('L<audio src="' + $(this).attr('rel') + '" autobuffer="autobuffer" loop="loop"></audio>')
-      $(event.target).siblings('input[name=do_export]').attr('checked','checked') //select for export
+      //$(event.target).siblings('input[name=do_export]').attr('checked','checked') //select for export
 	  })
   }
   function row_reload(event) {}

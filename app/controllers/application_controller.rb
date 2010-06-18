@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   
   before_filter :load_export_playlist
   def load_export_playlist
-    @export_playlist = Playlist.find_or_create_by_title('first_playlist') # HARD CODED
+    @export_playlist = Playlist.find_or_create_by_title('for_serg_and_logan') # HARD CODED
   end
   
   

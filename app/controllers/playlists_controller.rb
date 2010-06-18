@@ -35,7 +35,21 @@ class PlaylistsController < ApplicationController
     @export_dir = File.join(@db.path,'playlist_export',@playlist.export_path)
     @playlist.rows.each_with_index do |row,rindex|
       row.cells.each_with_index do |cell,cindex|
-        f_name_prefix=(rindex+1).to_s.rjust(3,"0") # produces strings like 001 021 099, etc        
+        # I go every other 001_* 003_* 005_*, will give me space to add crap
+        # on the even ones f(rindex) = x + (x + 1)
+        #f(0) = 1
+        # f(1) = 3
+        # f(2) = 5
+        # 
+        # f(0) = x + 1 
+        # f(1) = x + 2
+        # f(2) = x + 3
+        # 
+        # f(x) = x + (x + 1)
+        # 
+        # f(10) = 10 + 11 = 21
+        spaced_rindex = rindex + (rindex + 1)
+        f_name_prefix=spaced_rindex.to_s.rjust(3,"0") # produces strings like 001 021 099, etc        
         target_name = f_name_prefix + "_" + (cindex + 1).to_s + ".WAV"
         full_target_path = File.join(@export_dir,target_name)
         source_blob = cell.blob
