@@ -40,42 +40,37 @@ function total_rows() {
 function selected_row() {
   return $($('.selected_row')[selected_row_index()]).closest('tr');	
 }
-// KEYBOARD SHORTCUTS BEGIN
-//$('.controller_cell:first img.selected_row').css('visibility','visible')
+
 function handle_key_down(evt) {
 	console.info(evt.keyCode);
-	
-	
-
-
-	
-	
-	
-	
-	
-
-
   // WOULD BE Nice to not hijack anything with modifiers...this doesnt work
   // if(!evt.shiftKey && !evt.ctrlKey && !evt.altKey) // No Modifiers
   //   evt.preventDefault();
-  
-  
 	switch(evt.keyCode) {
 		case 74: _k_row_down(evt); break;	// j = row_down
 		case 75: _k_row_up(evt); break;		// k = row_up	
 		case 76: _k_load_row(evt); break;	// l = load row	
 		case 32:  // space = play looped or stop, preventDefault prevents space from moving scroll
+
+		  // NOTE THIS COULD BE BUGGY, the evt.shiftKey and stuff is not that well thought out
 		  var lstate =  selected_row().find('audio').data('loopoff_state');
 		  if(lstate == 'stopped' || lstate == undefined) {
 			  _k_row_play_looped(evt);  			  
 		  }
+		  else if(lstate == 'paused') {
+			  _k_row_play(evt);
+		  }
 		  else {
-			  _k_row_stop(evt);
+			  if(evt.shiftKey) {
+				  _k_row_pause(evt);
+			  }
+			  else {
+				  _k_row_stop(evt);
+			  }			  
 		  }		  
 		  evt.preventDefault(); 
 		  break;		
 		case 80: _k_row_play(evt); break; // p = play regular			
-		case 999: _k_row_pause(evt); break;			
 		case 65: _k_toggle_cell_mute(evt,0); break;		// a = toggle mute cell 1	
 		case 83: _k_toggle_cell_mute(evt,1); break;		// s = toggle mute cell 2	
 		case 68: _k_toggle_cell_mute(evt,2); break;		// d = toggle mute cell 3	
@@ -130,6 +125,7 @@ function _k_row_pause(evt) {
   selected_row().find('.row_pause').click()
 	return false;
 }
+
 function _k_toggle_row_checkbox(evt) {
 	console.info('toggle_row_checkbox called');
 	var chk =selected_row().find('input[name=do_export]');
@@ -144,6 +140,7 @@ function _k_toggle_row_checkbox(evt) {
 }
 function _k_toggle_cell_mute(evt,cell_index) {
 	console.info('toggle_cell_mute called for ' + cell_index);
+	$(selected_row().find('.cell_toggle_mute')[cell_index]).click();
 }
 function _k_previous_playlist(evt,cell_index) {
 	console.info('previous_playlist called for');
@@ -286,10 +283,12 @@ function cell_toggle_mute(evt) {
 	}
 	if(audio_obj.volume > 0) {
 	  audio_obj.volume = 0;
+	  $(evt.target).removeClass('unmuted').addClass('muted');
 	}
 	else {
 	  audio_obj.volume = 1;
-	}		
+	  $(evt.target).removeClass('muted').addClass('unmuted');
+	}	
 }
 
 ///////////////// HELPER FUNCTIONS BEGIN

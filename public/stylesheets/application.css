@@ -143,10 +143,10 @@ a.icon span { /* Label for icon */
 .row_play_looped {
 	background: url('/images/icons/control_repeat_blue.png') no-repeat left top;
 }
-.cell_toggle_mute {
+.muted {
 	background: url('/images/icons/sound_mute.png') no-repeat left top;
 }
-.sound {
+.unmuted {
 	background: url('/images/icons/sound.png') no-repeat left top;
 }
 .heart {
