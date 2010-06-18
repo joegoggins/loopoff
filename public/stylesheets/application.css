@@ -160,7 +160,10 @@ a.icon span { /* Label for icon */
 }
 
 .selected_row {
-	background: url('/images/icons/resultset_next.png') no-repeat left top;
+	visibility: hidden; 
+	position: absolute; 
+	left: 4px; 
+	margin-top: 3px;
 }
 
 .is_selected {

@@ -52,7 +52,8 @@
 			<%- @collection.rows.each_with_index do |lt_row,row_index| -%>
 			<tr class="<%= cycle('','alt') %>">
 				<td class="controller_cell">
-					<a name="r<%= row_index %>"></a>
+					<a id="r<%= row_index %>" name="r<%= row_index %>"></a>
+					<img class="selected_row" src="/images/icons/chevron.gif" />
 					<span class="f_left">
 						<a class="icon row_load"><span>Load this unloaded Row</span></a>																	
 						<input name="do_export" type="checkbox" value="<%= row_index %>" />

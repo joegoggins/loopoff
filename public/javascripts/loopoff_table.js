@@ -18,8 +18,24 @@ var actions=[
 	'delete_row_from_playlist'
 ];
 
+function selected_row_index() {
+	var to_return;
+	$('.selected_row').each(function(index) {			
+	  if($(this).css('visibility') == 'visible') {
+		  to_return = index;
+	  }	
+	});
+	return to_return;				
+}
+
+function total_rows() {
+ 	return $('.selected_row').length;
+}
+
+
 $(document).ready(function() {	
-	// KEYBOARD SHORTCUTS
+	// KEYBOARD SHORTCUTS BEGIN
+	//$('.controller_cell:first img.selected_row').css('visibility','visible')
 	function handle_key_down(evt) {
 		console.info(evt.keyCode);
 		// j = row_down
@@ -54,10 +70,25 @@ $(document).ready(function() {
 	}
 	$(document).bind('keydown',handle_key_down);
 	function _k_row_down(evt) {
-		console.info('row_down called'); return false;
+		console.info('row_down called');
+		var cur_index = selected_row_index();
+		if(cur_index + 1 >= total_rows()) {
+			return false;
+		}
+		
+    $($('.selected_row')[cur_index + 1]).css('visibility','visible');
+    $($('.selected_row')[cur_index]).css('visibility','hidden');
+		return false;
 	}
 	function _k_row_up(evt) {
-		console.info('row_up called'); return false;
+		console.info('row_up called'); 
+		var cur_index = selected_row_index();
+		if(cur_index == 0) {
+			return false;
+		}
+    $($('.selected_row')[cur_index - 1]).css('visibility','visible');
+    $($('.selected_row')[cur_index]).css('visibility','hidden');		
+		return false;
 	}
 	function _k_load_row(evt) {
 		console.info('load_row called'); return false;
@@ -78,8 +109,12 @@ $(document).ready(function() {
 		console.info('next_playlist called for ');
 	}
 	
+	// KEYBOARD SHORTCUTS END
 	
-	/////////// LOOPOFF TABLE ACTIONS
+	
+	
+	
+	/////////// LOOPOFF TABLE CORE ACTIONS BEGIN
   function playlist_info(event) {
 	  $('#playlist_info_content').jqmShow();
   }
@@ -229,6 +264,9 @@ $(document).ready(function() {
   ///////////////// HELPER FUNCTIONS END
 
 
+
+  // ACTUAL MANIPULATION OF DOM BEGIN
+
   // THE MOST IMPORTANT STUFF...bind all action css classes
   // with functions that handle their stuff
 	$(actions).each(function(index) {
@@ -244,5 +282,17 @@ $(document).ready(function() {
 	  document.location.href = $(evt.target).val();
 	  console.info($(evt.target).val());
   });  
+
+  //
+  //selected_row_from_url_selector = 'a[name=' +  +']';
+  if($(document.location.hash).length == 1) {
+	  //DOES NOT WORK
+	  $(document.location.hash).closest('tr').find('img.selected_row').css('visibility','visible');
+  }
+  else {
+	  $('.controller_cell:first img.selected_row').css('visibility','visible');
+  }
+	
+  // ACTUAL MANIPULATION DOM END
 });
 
