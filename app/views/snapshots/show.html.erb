@@ -1,13 +1,18 @@
-<h1>Listing paths in this snapshot</h1>
-<ul>
-<%- @commit_paths.each do |cp| -%>
-  <li><%= link_to "Loopoff &quot;#{cp.first}&quot;", db_commit_path_loopoff_path(@db,@commit.sha,cp.last) %></li>
+<div style="float:right">
+	<h2>Go to a subdirectory</h2>
+	<ul>
+	<%- @tree.loopoff_child_trees.each do |tree| -%>
+	  <li><%= link_to tree.name, db_commit_path_loopoff_path(@db,@commit,tree) %></li>
+	<%- end -%>
+	</ul>
+</div>
+<%- if @tree.contains_loopoff_files? -%>
+  <h2><%= link_to "loop these files",db_commit_path_loopoff_path(@db,@commit,@tree) %></h2>
 <%- end -%>
-</ul>
-<h2>Diff Stats</h2>
+<h2>Files</h2>
 <ul>
-<% @diff_stats.each do |s| %>
-  <li><%= s.inspect %></li>
+<%- @tree.loopoff_blobs.each do |blob| -%>
+  <li><%= blob.name -%></li>
 <%- end -%>
 </ul>
 

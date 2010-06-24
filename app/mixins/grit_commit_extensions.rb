@@ -8,6 +8,9 @@ module Mixins::GritCommitExtensions
         't'
       end
       
+      def to_param
+        self.id
+      end
       # TODO: make this not brittle as hell
       def extract_row_name_from_message(row_name,aggregation_method=:name_prefix)
         begin

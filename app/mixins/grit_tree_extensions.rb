@@ -40,8 +40,7 @@ module Mixins::GritTreeExtensions
       # end
 
       def to_param
-        "-" # TODO: fix, hardcoded to root path of tree
-        #self.name
+        self.id
       end
 
       # def basename
@@ -62,9 +61,27 @@ module Mixins::GritTreeExtensions
       
 
       # LOOPOFF TABLE INTERFACE END  
+      
+      def contains_loopoff_files?
+        !loopoff_blobs.empty?
+      end
 
       def loopoff_blobs
-        self.blobs.select {|x| Db.is_loopoff_file_name?(x.name)}
+        if @loopoff_blobs.blank?
+          @loopoff_blobs = self.blobs.select {|x| Db.is_loopoff_file_name?(x.name)}
+        end
+        @loopoff_blobs
+      end
+      
+      # paths in the repo that contain loopoff_blobs
+      def loopoff_child_trees
+        returning [] do |a|
+          self.trees.each do |t|
+            if t.contains_loopoff_files?
+              a << t
+            end
+          end  
+        end        
       end
       
       def aggregated_blobs
