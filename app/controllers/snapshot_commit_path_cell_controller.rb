@@ -8,12 +8,7 @@ class SnapshotCommitPathCellController < Loader::DbController
   end
   
   def show
-    if params[:path_id] = '-'
-      @blob = @db.repo.blob(params[:id])
-    else
-      # not sure...
-    end
-    #debugger
+    @blob = @db.repo.blob(params[:id])
     send_data @blob.data, :type => "audio/wav", :filename => @blob.id + '.wav'
   end  
 end

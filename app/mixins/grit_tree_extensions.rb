@@ -75,13 +75,15 @@ module Mixins::GritTreeExtensions
       
       # paths in the repo that contain loopoff_blobs
       def loopoff_child_trees
-        returning [] do |a|
+        if @loopoff_child_trees.blank?
+          @loopoff_child_trees = []
           self.trees.each do |t|
             if t.contains_loopoff_files?
-              a << t
+              @loopoff_child_trees << t
             end
-          end  
-        end        
+          end            
+        end
+        @loopoff_child_trees
       end
       
       def aggregated_blobs

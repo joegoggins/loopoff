@@ -1,10 +1,16 @@
 <div style="float:right">
+	<%- unless @tree.loopoff_child_trees.empty? -%>
 	<h2>Go to a subdirectory</h2>
 	<ul>
 	<%- @tree.loopoff_child_trees.each do |tree| -%>
-	  <li><%= link_to tree.name, db_commit_path_loopoff_path(@db,@commit,tree) %></li>
+	  <li><%= link_to tree.name, db_commit_path_path(@db,@commit,tree) %></li>
 	<%- end -%>
 	</ul>
+	<%- end -%>
+	<h2>Commit Details</h2>
+	<pre>
+	<%= @commit.message %>	
+	</pre>
 </div>
 <%- if @tree.contains_loopoff_files? -%>
   <h2><%= link_to "loop these files",db_commit_path_loopoff_path(@db,@commit,@tree) %></h2>

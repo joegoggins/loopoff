@@ -63,7 +63,7 @@
             # only stuff in the repo can "add to playlist"
             if lt_row.cells.any? {|x| x.kind_of? Lt::BlobCell} -%>
 						<a href="javascript:void(0)" class="add_selected_to_playlist" rel="<%=
-						add_selected_rows_to_playlist_db_commit_path_loopoff_path(@db,@commit.id,"-") %>">a</a>
+						add_selected_rows_to_playlist_db_commit_path_loopoff_path(@db,@commit,"-") %>">a</a>
 						<%- elsif lt_row.cells.any? {|x| x.kind_of? Lt::FileCell} -%>
 						<a href="javascript:void(0)" class="export_selected" rel="<%=
 						  export_selected_rows_db_unarchived_path_loopoff_path(@db,@collection) %>">x</a>

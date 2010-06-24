@@ -1,7 +1,7 @@
 <h1>Listing all commits</h1>
 <ul>
 	<%- @commits.each do |c| -%>
-		<li><%= c.to_s %> : <%= link_to "Details", db_commit_path(@db.name,c.sha)  %>
+		<li><%= c.to_s %> : <%= link_to "Details", db_commit_path(@db.name,c)  %>
 			<pre>
 			<%= c.message %>	
 			</pre>
