@@ -84,7 +84,9 @@
 						<span class="row_misc"></span>
 					</span>
 				</td>
-				<%- lt_row.cells.each_with_index do |cell,col_index| -%>
+				<%- 3.times do |col_index| 
+					cell = lt_row.cells[col_index]
+					-%>
 				  <%- if cell.nil? -%>
 				    <td style="opacity: 0.3; font-size: .65em">n/a</td>
 				  <%- else -%>
