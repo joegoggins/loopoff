@@ -1,10 +1,6 @@
 class ArchiveLoopoffController < Loader::DbController
   def show
-    @distinct_blobs_aggregated = @db.repo.distinct_blobs_aggregated
-    @table = Lt::Table.new
-    @distinct_blobs_aggregated.each do |b|
-
-    end
-    
+    @collection = @db.repo
+    render :partial => 'loopoff_table/show', :layout => true
   end
 end
