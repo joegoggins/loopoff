@@ -10,8 +10,7 @@ module Mixins::GritTreeExtensions
             @cells << Lt::BlobCell.new(:name => b.name,
               :size => nil, # b.size is expensive to compute, hell with it
               :sha => b.id,
-              :is_identical => false      
-                  
+              :is_identical => false                        
             )
           end
         end
@@ -42,10 +41,6 @@ module Mixins::GritTreeExtensions
       def to_param
         self.id
       end
-
-      # def basename
-      #   File.basename(self.path)
-      # end
 
       def basename
         if self.name.nil?
