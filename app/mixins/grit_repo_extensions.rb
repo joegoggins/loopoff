@@ -19,11 +19,15 @@ module Mixins::GritRepoExtensions
         if @rows.blank?
           @rows = []
           self.commits.each do |commit|
-            if self.tree.contains_loopoff_files?
-              tree.aggregated_blobs.to_a.each do |tuple|
-                @rows << Lt::Row.new(:name => tuple.first,:cells => tuple.last)
-              end
+            agg_blobs = commit.tree.aggregated_blobs.to_a            
+            commit.tree.all_loopoff_child_trees.each do |tree|
+              agg_blobs += tree.aggregated_blobs.to_a
             end
+            agg_blobs.each do |tuple|
+              @rows << Lt::Row.new(:name => tuple.first,:cells => tuple.last)
+            end
+            
+            # TODO: remove duplicate rows
           end              
         end
         @rows

@@ -10,6 +10,7 @@ class ArchiveBlobsController < Loader::DbController
     # while in development
     Grit::Tree.send(:include, Mixins::GritTreeExtensions)
     @collection = @db.repo 
+
     render :partial => 'loopoff_table/show', :layout => true
   end
 
