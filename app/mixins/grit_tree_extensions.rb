@@ -42,19 +42,24 @@ module Mixins::GritTreeExtensions
         self.id
       end
 
+      
+      # This function should be incorporated as a Grit Patch
+      # it alleviates 
+      # >> t.basename
+      #       TypeError: can't convert nil into String
+      #         from /opt/local/lib/ruby/gems/1.8/gems/grit-2.0.0/lib/grit/tree.rb:99:in `basename'
+      #         from /opt/local/lib/ruby/gems/1.8/gems/grit-2.0.0/lib/grit/tree.rb:99:in `basename'
+      #         from (irb):2
+      #       >> t2.name
+      # and instead returns "."
+      #  
       def basename
         if self.name.nil?
           return "."
         else
           super
         end        
-      end
-      
-      # def loopoff_file_names
-      #   Db.loopoff_file_names(self.entries.map {|x| File.join(self.path,x)})
-      # end
-      
-
+      end          
       # LOOPOFF TABLE INTERFACE END  
       
       def contains_loopoff_files?
