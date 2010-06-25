@@ -1,5 +1,5 @@
 class Lt::Row
-  attr_accessor :name, :cells, :blob
+  attr_accessor :name, :cells, :blob, :title_from_commit_message
   def initialize(hash={})
     hash.each_pair do |k,v|
       self.send("#{k}=",v)
@@ -12,5 +12,5 @@ class Lt::Row
     else
       nil
     end
-  end  
+  end    
 end

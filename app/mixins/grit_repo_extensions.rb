@@ -24,7 +24,10 @@ module Mixins::GritRepoExtensions
               agg_blobs += tree.aggregated_blobs.to_a
             end
             agg_blobs.each do |tuple|
-              @rows << Lt::Row.new(:name => tuple.first,:cells => tuple.last)
+              @rows << Lt::Row.new(:name => tuple.first,
+                :cells => tuple.last,
+                :title_from_commit_message => commit.extract_row_name_from_message(tuple.first)  
+              )              
             end
             
             # TODO: remove duplicate rows
