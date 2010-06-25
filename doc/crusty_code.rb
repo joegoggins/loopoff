@@ -1,3 +1,22 @@
+
+# self.trees.each do |t|
+#   if t.contains_loopoff_files?
+#     @all_loopoff_child_trees << t
+#   end
+#   t.trees.each do |t2|
+#     if t.contains_loopoff_files?
+#       @all_loopoff_child_trees << t
+#     end
+#     
+#     t2.trees.each do |t3|  
+#       if t.contains_loopoff_files?
+#         @all_loopoff_child_trees << t
+#       end
+#       # ...
+#     end
+#   end
+# end
+
 #TODO, contineu here
 # @unarchived_path.my_aggregated_files.each_with_index do |agg_tuple,row_index|
 #       next unless @rows.include?(row_index)

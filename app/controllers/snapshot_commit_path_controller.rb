@@ -4,8 +4,8 @@ class SnapshotCommitPathController < Loader::DbController
   def show
     @commit = @db.repo.commit(params[:commit_id])
     @tree = @db.repo.tree(params[:id])
+    @all_loopoff_child_trees = []    
     render :template => 'snapshots/show'
-
   end
 
 end

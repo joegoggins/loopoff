@@ -1,8 +1,8 @@
 <div style="float:right">
-	<%- unless @tree.loopoff_child_trees.empty? -%>
+	<%- unless @all_loopoff_child_trees.empty? -%>
 	<h2>Go to a subdirectory</h2>
 	<ul>
-	<%- @tree.loopoff_child_trees.each do |tree| -%>
+	<%- @all_loopoff_child_trees.each do |tree| -%>
 	  <li><%= link_to tree.name, db_commit_path_path(@db,@commit,tree) %></li>
 	<%- end -%>
 	</ul>

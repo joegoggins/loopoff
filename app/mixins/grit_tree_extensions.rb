@@ -81,6 +81,26 @@ module Mixins::GritTreeExtensions
         @loopoff_child_trees
       end
       
+      def recursor(tree_array,current_tree)
+        if current_tree.contains_loopoff_files?
+          tree_array << current_tree
+        end
+        current_tree.trees.each do |t|
+          recursor(tree_array,t)
+        end
+        return tree_array
+      end
+      # paths in the repo that contain loopoff_blobs
+      def all_loopoff_child_trees
+        if @all_loopoff_child_trees.blank?
+          @all_loopoff_child_trees = []
+          self.trees.each do |t|
+            @all_loopoff_child_trees += recursor([],t)
+          end          
+        end
+        @all_loopoff_child_trees
+      end
+      
       def aggregated_blobs
         if @aggregated_blobs.blank?
           @aggregated_blobs =[]
@@ -105,46 +125,6 @@ module Mixins::GritTreeExtensions
         end        
         @aggregated_blobs
       end
-      # def my_aggregated_file_hash
-      #        if @my_aggregated_file_hash
-      #          @my_aggregated_file_hash
-      #        else
-      #          # yields elements like ["007", ["007_2.WAV", "007_3.WAV"]]
-      #          @my_aggregated_file_hash = self.cells.group_by do |lt_cell|
-      #            lt_cell.basename.split('_').first
-      #          end
-      #             #{|x| File.basename(x.name)}.group_by {|x| x.split('_').first}.sort
-      # 
-      #          # insert nils to make matrix solid, like ["007", [nil, "007_2.WAV", "007_3.WAV"]]
-      #          @my_aggregated_file_hash.map do |x| 
-      #            if x.last.length != 3
-      #              modded_3_tuple = [nil,nil,nil]
-      #              x.last.each_with_index do |lt_cell,index|
-      #                f_number = lt_cell.basename.split('_').last.gsub(/\.WAV/,'').to_i # the 2 or 3 part minus the .WAV
-      #                modded_3_tuple[f_number-1] = lt_cell            
-      #              end
-      #              x[1]=modded_3_tuple
-      #              x
-      #            else 
-      #              x
-      #            end
-      #          end
-      #        end
-      #      end
-      # include Enumerable
-      # def each
-      #   self.blobs.sort_by(&:name).each do |b|
-      #     yield b
-      #   end
-      # end
-      
-      # def rows
-      #   
-      # end
-      # 
-      # def cells
-      #   self.entries
-      # end
     end
   end
 end

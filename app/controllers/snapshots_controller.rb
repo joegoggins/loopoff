@@ -6,6 +6,7 @@ class SnapshotsController < Loader::DbController
   def show
     @commit = @db.repo.commit(params[:id])
     @tree = @commit.tree
+    @all_loopoff_child_trees = @commit.tree.all_loopoff_child_trees
     # @commit_paths = [] 
     #     # TODO: check for loopable files in each
     #     if @commit.tree.trees.empty?
