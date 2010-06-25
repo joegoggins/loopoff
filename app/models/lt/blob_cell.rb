@@ -8,12 +8,10 @@ class Lt::BlobCell < Lt::Cell
   end
   
   def basename
-    "TODO"
+    self.name
   end
-  alias_method :to_param, :basename
-  
-  
-  def data
-    "TODO"
-  end
+
+  def to_param
+    self.sha
+  end  
 end

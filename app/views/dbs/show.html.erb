@@ -1,5 +1,5 @@
 <h1>Show <%= @db.name %> database</h1>
-<p><%= link_to "entire archive loopoff!", db_blobs_loopoff_path(@db.name) %></p>
+<p><%= link_to "entire archive loopoff!", db_blobs_path(@db.name) %></p>
 <p><%= link_to "list unarchived file paths", db_unarchived_paths_path(@db.name) %></p>
 <p><%= link_to "list all snapshots", db_commits_path(@db.name) %></p>
 

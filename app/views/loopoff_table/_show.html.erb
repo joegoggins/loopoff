@@ -95,7 +95,7 @@
 				  if cell.kind_of? Lt::FileCell
 					  db_unarchived_path_cell_path(@db,@unarchived_path,"#{row_index},#{col_index}")
 					elsif cell.kind_of? Lt::BlobCell
-						db_commit_path_cell_path(@db,@commit.id,"-",cell.sha)
+						db_blob_path(@db,cell)
 					elsif cell.kind_of? PlaylistCell
 						playlist_cell_path(@collection,cell)
 					else
@@ -106,7 +106,7 @@
 							<span class="f_left cell_title"></span>
 							<span class="cell_misc">
 								<%- if cell.respond_to? :is_identical -%>
-								<%= @collection.cell(row_index,col_index).is_identical ? "identical" : "" -%>								
+								<%=   cell.is_identical ? "identical" : "" -%>								
 								<%- end -%>
 							</span>
 							<span class="f_right">
