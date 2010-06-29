@@ -1,0 +1,23 @@
+git filter-branch --index-filter 'mkdirgit rm --cached --ignore-unmatch 
+
+
+git filter-branch --tree-filter 'mkdir rc50; ' HEAD
+
+
+git filter-branch --tree-filter 'mkdir rc50; for i in $(ls *.WAV); do git mv $i rc50/$i; done' HEAD
+
+git filter-branch --tree-filter 'echo "unarchived/*" > .gitignore; echo ".DS_Store" >> .gitignore; git add .gitignore' HEAD
+
+
+rake build
+
+archive_rows
+
+archive_cells
+  file_name
+  size
+  sha
+
+archive_trees
+
+

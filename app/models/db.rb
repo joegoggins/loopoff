@@ -1,8 +1,15 @@
+# DEPRECATE DB CLASS ALTOGETHER
+# DEPRECATE DB CLASS ALTOGETHER
+# DEPRECATE DB CLASS ALTOGETHER
+# DEPRECATE DB CLASS ALTOGETHER
+# DEPRECATE DB CLASS ALTOGETHER
+
+# REPLACE WITH Repo
 require 'find'
 class Db < Dir
   
   # DEFINES THE FILES THAT LOOPOFF CARES ABOUT IN A GIVEN @blob.name or @file.basename
-  #
+  # TODO: DEPRECATE
   def self.is_loopoff_file_name?(the_basename)
     the_basename.match(/.wav/i)
   end
@@ -11,11 +18,7 @@ class Db < Dir
   # this is a definition of a "Loopoff Db"
   def self.all
     returning [] do |t|
-      Dir.chdir("#{RAILS_ROOT}/loop_db") do
-        Dir.glob("**/repo/.git").each do |path_to_dot_git|
-          t << self.new(File.expand_path("#{path_to_dot_git}/../.."))  
-        end
-      end
+      t << self.new(File.expand_path("#{RAILS_ROOT}/loop_db/"))  
     end
   end
   
@@ -24,7 +27,9 @@ class Db < Dir
   end
   
   def self.[](db_name)
-    self.all.detect {|x| x.name == db_name.to_s}
+    self.first # TOTALLY WEIRD CRAP DEPRECATE DB CLASS ALTOGETHER
+    
+    # self.all.detect {|x| x.name == db_name.to_s}
   end
     
   def name
@@ -36,15 +41,15 @@ class Db < Dir
   end
   
   def repo
-    @repo ||= Repo.new(self.path + '/repo')
+    @repo ||= Grit::Repo.new(self.path)
   end
     
   # any dir containing wav files that's not in /repo
   def unarchived_paths(*args)
     t = []
     Dir.chdir(self.path) do
-      Find.find('.') do |f|
-        if File.basename(f) == 'repo'
+      Find.find('unarchived') do |f|
+        if false
           Find.prune 
         elsif File.directory?(f)
           if Dir.entries(f).any? {|e| e.match(/\.wav/i)}              

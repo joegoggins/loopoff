@@ -12,6 +12,7 @@ class UnarchivedPath < Dir
   # LOOPOFF TABLE INTERFACE BEGIN
   def cells
     if @cells.blank?
+
       @cells = []
       self.loopoff_file_names.each do |f|
         @cells << Lt::FileCell.new(:name => f,
@@ -61,13 +62,8 @@ class UnarchivedPath < Dir
 
   # LOOPOFF TABLE INTERFACE END  
 
-
   def new_cells
     self.cells.select {|x| !x.is_identical}
-  end
-
-  def repo
-    @repo ||= Grit::Repo.new(self.path)
   end
   
   ################

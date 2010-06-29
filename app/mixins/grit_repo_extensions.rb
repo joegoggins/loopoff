@@ -14,7 +14,7 @@ module Mixins::GritRepoExtensions
         end
         @cells
       end
-    
+      
       def rows
         if @rows.blank?
           @rows = []
@@ -63,6 +63,43 @@ module Mixins::GritRepoExtensions
 
 
           # LOOPOFF TABLE INTERFACE END
+          
+      # REFACTORED, NOT TESTED
+      def each_blob
+        self.commits.each do |commit|
+          commit.tree.blobs.each do |blob|
+            yield blob
+          end
+          commit.tree.all_loopoff_child_trees.each do |tree|
+            tree.blobs.each do |blob|
+              yield blob
+            end
+          end
+        end        
+      end
+          
+      # REFACTORED, NOT TESTED
+      def distinct_blobs
+       if @distinct_blobs.blank?
+         @distinct_blobs = []
+         distinct_blob_ids = []
+         self.each_blob do |b|
+           unless distinct_blob_ids.include?(b.id)            
+             @distinct_blobs << b
+             distinct_blob_ids << b.id
+           end           
+         end
+       end
+       @distinct_blobs
+      end
+
+      def distinct_blob_ids
+       self.distinct_blobs.map {|x| x.id}
+      end  
+      def distinct_blobs_aggregated
+       #                                  #  (DDD)_N.WAV                                                #  Blob file names are wavs
+       self.distinct_blobs.group_by {|x| x.name.split('_').first}.sort.delete_if {|x| x.last.any? {|y| !y.name.match(/\.WAV/i)}}
+      end    
     end
   end  
 end
