@@ -1,8 +1,18 @@
 = Loopoff
-Loopoff is a Rails + <audio> tag + git based audio loop management and archival system
+Loopoff is a Rails 2 + <audio> tag + git based multi-track audio loop management and archival system
 
 It was written so I could spend less time managing audio files and more time making loops with
 my Boss RC-50 and RC-20 loop stations.
 
-The app is very unstable at this point, I hope to release something stable-ish/useful for others
-by the end of the summer.
+Sorry folks, I took this piece off of github temporarily and into my own git-repo
+because my research + tinkering has ventured into some ambiguious territory.
+
+Furthermore, though I have something nice that I use regularly to organize, archive, play, and backup my audio,
+it's a bit too duck-taped together to be a viable open source project on github at the moment.
+
+Having said this, if anyone is looking to collaborate on project's similar to this one or is interested in gettin at my source code,
+drop me a line and I'll be sure to get things together and push to github or tarball it up and send it to ya.
+
+Cheers!
+
+-joe
